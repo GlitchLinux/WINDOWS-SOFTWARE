@@ -466,7 +466,7 @@ function Download-Software {
         # Use BITS (Background Intelligent Transfer Service) for more reliable downloads
         Start-BitsTransfer -Source $url -Destination $destinationFile -DisplayName "Downloading $fileName"
         
-        if (Test-Path -Path $destinationFile)) {
+        if (Test-Path -Path $destinationFile) {
             Write-Host "Download completed: $destinationFile" -ForegroundColor Green
             return $destinationFile
         } else {
@@ -499,7 +499,7 @@ function Process-DownloadedFile {
                 }
             }
         }
-        ".zip" -or ".7z" -or ".rar" {
+        {$_ -in ".zip",".7z",".rar"} {
             Write-Host "This is an archive file."
             $extract = Read-Host "Do you want to extract it now? (y/n)"
             if ($extract -eq "y") {
