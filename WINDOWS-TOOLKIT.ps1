@@ -957,9 +957,11 @@ function Show-FileNumberInput {
     
     if ($input -eq "B") {
         Show-BatchModeMenu
-    } elseif ($input -eq "Q") {
+    } 
+    elseif ($input -eq "Q") {
         return "QUIT"
-    } elseif ($input -match "^(\d+):([\d\-, ]+)$") {
+    } 
+    elseif ($input -match "^(\d+):([\d\-, ]+)$") {
         $category = $matches[1]
         $numbers = $matches[2]
         
@@ -973,6 +975,7 @@ function Show-FileNumberInput {
         $selectedIndices = @()
         $numberParts = $numbers -split ',' | ForEach-Object { $_.Trim() }
         
+        # Corrected foreach syntax
         foreach ($part in $numberParts) {
             if ($part -match "^(\d+)-(\d+)$") {
                 $start = [int]$matches[1] - 1
@@ -980,7 +983,8 @@ function Show-FileNumberInput {
                 if ($start -le $end -and $end -lt $categories[$category].Files.Count) {
                     $selectedIndices += $start..$end
                 }
-            } elseif ($part -match "^\d+$") {
+            } 
+            elseif ($part -match "^\d+$") {
                 $index = [int]$part - 1
                 if ($index -ge 0 -and $index -lt $categories[$category].Files.Count) {
                     $selectedIndices += $index
@@ -1008,7 +1012,8 @@ function Show-FileNumberInput {
         }
         
         Download-MultipleFiles -files $filesToDownload
-    } else {
+    } 
+    else {
         Write-Host "Invalid input format." -ForegroundColor Red
         Pause
         Show-FileNumberInput
