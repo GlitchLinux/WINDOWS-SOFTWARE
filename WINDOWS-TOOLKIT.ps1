@@ -529,7 +529,7 @@ function Extract-Archive {
         
         # Check if 7-Zip is available
         $7zipPath = "$env:ProgramFiles\7-Zip\7z.exe"
-        if (Test-Path -Path $7zipPath)) {
+        if (Test-Path -Path $7zipPath) {
             # Use 7-Zip for extraction
             Write-Host "Extracting using 7-Zip..."
             & $7zipPath x "-o$extractPath" -y $filePath | Out-Null
@@ -722,7 +722,7 @@ function Invoke-FileDownload {
         return $true
     } catch {
         Write-Log "Error downloading $url to $destinationFile : $_" -level "ERROR"
-        if (Test-Path $destinationFile)) {
+        if (Test-Path $destinationFile) {
             Remove-Item $destinationFile -Force
         }
         return $false
