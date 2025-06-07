@@ -607,3 +607,500 @@ while ($running) {
 }
 
 Write-Host "Thank you for using Windows Software Downloader Utility!"
+
+
+# Additional configuration
+$logFile = "$env:TEMP\WindowsSoftwareDownloader.log"
+$enableLogging = $true
+$verifyChecksums = $false  # Set to $true to enable SHA256 checksum verification (requires checksum file)
+
+function Write-Log {
+    param (
+        [string]$message,
+        [string]$level = "INFO"
+    )
+    
+    if (-not $enableLogging) { return }
+    
+    $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    $logEntry = "[$timestamp] [$level] $message"
+    
+    try {
+        Add-Content -Path $logFile -Value $logEntry -ErrorAction Stop
+    } catch {
+        Write-Host "Failed to write to log file: $_" -ForegroundColor Yellow
+    }
+}
+
+function Get-FileSize {
+    param (
+        [string]$url
+    )
+    
+    try {
+        $request = [System.Net.WebRequest]::Create($url)
+        $request.Method = "HEAD"
+        $response = $request.GetResponse()
+        $fileSize = $response.Headers["Content-Length"]
+        $response.Close()
+        
+        if ($fileSize) {
+            return [int64]$fileSize
+        }
+    } catch {
+        Write-Log "Error getting file size for $url : $_" -level "WARNING"
+    }
+    
+    return $null
+}
+
+function Show-DownloadProgress {
+    param (
+        [string]$fileName,
+        [int64]$bytesDownloaded,
+        [int64]$totalBytes
+    )
+    
+    if ($totalBytes -gt 0) {
+        $percentComplete = [math]::Round(($bytesDownloaded / $totalBytes) * 100, 2)
+        $downloadedMB = [math]::Round($bytesDownloaded / 1MB, 2)
+        $totalMB = [math]::Round($totalBytes / 1MB, 2)
+        
+        Write-Progress -Activity "Downloading $fileName" -Status "$percentComplete% Complete ($downloadedMB MB of $totalMB MB)" `
+            -PercentComplete $percentComplete
+    } else {
+        Write-Progress -Activity "Downloading $fileName" -Status "Downloading..."
+    }
+}
+
+function Invoke-FileDownload {
+    param (
+        [string]$url,
+        [string]$destinationFile,
+        [int64]$expectedSize = $null
+    )
+    
+    try {
+        $request = [System.Net.WebRequest]::Create($url)
+        $response = $request.GetResponse()
+        $stream = $response.GetResponseStream()
+        $fileStream = [System.IO.File]::Create($destinationFile)
+        
+        $buffer = New-Object byte[] 64KB
+        $bytesDownloaded = 0
+        $lastUpdate = [DateTime]::MinValue
+        
+        do {
+            $read = $stream.Read($buffer, 0, $buffer.Length)
+            if ($read -gt 0) {
+                $fileStream.Write($buffer, 0, $read)
+                $bytesDownloaded += $read
+                
+                # Update progress no more than 5 times per second
+                if (([DateTime]::Now - $lastUpdate).TotalMilliseconds -gt 200) {
+                    Show-DownloadProgress -fileName (Split-Path $destinationFile -Leaf) `
+                        -bytesDownloaded $bytesDownloaded -totalBytes $response.ContentLength
+                    $lastUpdate = [DateTime]::Now
+                }
+            }
+        } while ($read -gt 0)
+        
+        $fileStream.Close()
+        $stream.Close()
+        $response.Close()
+        
+        Write-Progress -Activity "Downloading" -Completed
+        
+        # Verify file size
+        $actualSize = (Get-Item $destinationFile).Length
+        if ($expectedSize -and ($actualSize -ne $expectedSize)) {
+            Write-Log "File size mismatch for $destinationFile (Expected: $expectedSize, Actual: $actualSize)" -level "WARNING"
+            Remove-Item $destinationFile -Force
+            return $false
+        }
+        
+        return $true
+    } catch {
+        Write-Log "Error downloading $url to $destinationFile : $_" -level "ERROR"
+        if (Test-Path $destinationFile)) {
+            Remove-Item $destinationFile -Force
+        }
+        return $false
+    }
+}
+
+function Search-Software {
+    param (
+        [string]$searchTerm
+    )
+    
+    $results = @()
+    foreach ($category in $categories.Keys) {
+        foreach ($file in $categories[$category].Files) {
+            if ($file.Name -like "*$searchTerm*") {
+                $results += [PSCustomObject]@{
+                    Category = $categories[$category].Name
+                    Name = $file.Name
+                    Url = $file.Url
+                }
+            }
+        }
+    }
+    
+    return $results
+}
+
+function Show-SearchResults {
+    param (
+        [array]$results
+    )
+    
+    Clear-Host
+    Write-Host "============================================="
+    Write-Host "           SEARCH RESULTS                   "
+    Write-Host "============================================="
+    Write-Host "Found $($results.Count) matching files"
+    Write-Host "---------------------------------------------"
+    
+    if ($results.Count -eq 0) {
+        Write-Host "No matching files found."
+        Pause
+        return
+    }
+    
+    $index = 1
+    foreach ($result in $results) {
+        Write-Host " $index. [$($result.Category)] $($result.Name)"
+        $index++
+    }
+    
+    Write-Host "---------------------------------------------"
+    Write-Host "Enter numbers separated by commas to download"
+    Write-Host " B. Back to main menu"
+    Write-Host " Q. Quit"
+    Write-Host "============================================="
+    
+    $choice = Read-Host "Enter your choice"
+    
+    if ($choice -eq "B") {
+        return
+    } elseif ($choice -eq "Q") {
+        return "QUIT"
+    } elseif ($choice -match "^[\d, ]+$") {
+        $selectedIndices = $choice -split ',' | ForEach-Object { [int]($_.Trim()) - 1 }
+        $selectedFiles = @()
+        
+        foreach ($i in $selectedIndices) {
+            if ($i -ge 0 -and $i -lt $results.Count) {
+                $selectedFiles += $results[$i]
+            }
+        }
+        
+        if ($selectedFiles.Count -gt 0) {
+            Download-MultipleFiles -files $selectedFiles
+        } else {
+            Write-Host "Invalid selection." -ForegroundColor Red
+            Pause
+        }
+    } else {
+        Write-Host "Invalid choice." -ForegroundColor Red
+        Pause
+    }
+}
+
+function Download-MultipleFiles {
+    param (
+        [array]$files
+    )
+    
+    Clear-Host
+    Write-Host "============================================="
+    Write-Host "       DOWNLOADING SELECTED FILES            "
+    Write-Host "============================================="
+    Write-Host "Download Path: $downloadPath"
+    Write-Host "---------------------------------------------"
+    Write-Host "Selected files:"
+    
+    foreach ($file in $files) {
+        Write-Host " - $($file.Name)"
+    }
+    
+    Write-Host "---------------------------------------------"
+    
+    # Ensure download directory exists
+    if (-not (Test-Path -Path $downloadPath)) {
+        New-Item -ItemType Directory -Path $downloadPath -Force | Out-Null
+    }
+    
+    $successCount = 0
+    $failedCount = 0
+    
+    foreach ($file in $files) {
+        $fileName = $file.Name
+        $fileUrl = $file.Url
+        $destinationFile = Join-Path -Path $downloadPath -ChildPath $fileName
+        
+        Write-Host "`nDownloading $fileName..."
+        Write-Log "Starting download: $fileName from $fileUrl"
+        
+        $fileSize = Get-FileSize -url $fileUrl
+        $success = Invoke-FileDownload -url $fileUrl -destinationFile $destinationFile -expectedSize $fileSize
+        
+        if ($success) {
+            Write-Host "Download completed: $fileName" -ForegroundColor Green
+            Write-Log "Successfully downloaded: $fileName"
+            $successCount++
+            
+            # Process the downloaded file
+            Process-DownloadedFile -filePath $destinationFile
+        } else {
+            Write-Host "Download failed: $fileName" -ForegroundColor Red
+            Write-Log "Failed to download: $fileName" -level "ERROR"
+            $failedCount++
+        }
+    }
+    
+    Write-Host "`n---------------------------------------------"
+    Write-Host "Download summary:"
+    Write-Host " - Successfully downloaded: $successCount"
+    Write-Host " - Failed downloads: $failedCount"
+    Write-Host "============================================="
+    Pause
+}
+
+function Show-BatchModeMenu {
+    Clear-Host
+    Write-Host "============================================="
+    Write-Host "           BATCH DOWNLOAD MODE              "
+    Write-Host "============================================="
+    Write-Host "1. Download all files from a category"
+    Write-Host "2. Download from a list of file numbers"
+    Write-Host "---------------------------------------------"
+    Write-Host " B. Back to main menu"
+    Write-Host " Q. Quit"
+    Write-Host "============================================="
+    
+    $choice = Read-Host "Enter your choice"
+    
+    switch ($choice) {
+        "1" {
+            Show-CategorySelection
+        }
+        "2" {
+            Show-FileNumberInput
+        }
+        "B" {
+            return
+        }
+        "Q" {
+            return "QUIT"
+        }
+        default {
+            Write-Host "Invalid choice." -ForegroundColor Red
+            Pause
+        }
+    }
+}
+
+function Show-CategorySelection {
+    Clear-Host
+    Write-Host "============================================="
+    Write-Host "    SELECT CATEGORY FOR BATCH DOWNLOAD      "
+    Write-Host "============================================="
+    Write-Host "Available Categories:"
+    foreach ($key in $categories.Keys | Sort-Object) {
+        Write-Host " $key. $($categories[$key].Name) - $($categories[$key].Description)"
+    }
+    Write-Host "---------------------------------------------"
+    Write-Host " B. Back to batch menu"
+    Write-Host " Q. Quit"
+    Write-Host "============================================="
+    
+    $choice = Read-Host "Enter category number"
+    
+    if ($choice -eq "B") {
+        Show-BatchModeMenu
+    } elseif ($choice -eq "Q") {
+        return "QUIT"
+    } elseif ($choice -in $categories.Keys) {
+        $confirm = Read-Host "Download ALL $($categories[$choice].Files.Count) files from $($categories[$choice].Name)? (y/n)"
+        if ($confirm -eq "y") {
+            $filesToDownload = @()
+            foreach ($file in $categories[$choice].Files) {
+                $filesToDownload += [PSCustomObject]@{
+                    Category = $categories[$choice].Name
+                    Name = $file.Name
+                    Url = $file.Url
+                }
+            }
+            Download-MultipleFiles -files $filesToDownload
+        }
+    } else {
+        Write-Host "Invalid category." -ForegroundColor Red
+        Pause
+        Show-CategorySelection
+    }
+}
+
+function Show-FileNumberInput {
+    Clear-Host
+    Write-Host "============================================="
+    Write-Host "     ENTER FILE NUMBERS TO DOWNLOAD         "
+    Write-Host "============================================="
+    Write-Host "Format: category:numbers (e.g., '1:1,3,5' or '2:1-5')"
+    Write-Host "---------------------------------------------"
+    Write-Host " B. Back to batch menu"
+    Write-Host " Q. Quit"
+    Write-Host "============================================="
+    
+    $input = Read-Host "Enter your selection"
+    
+    if ($input -eq "B") {
+        Show-BatchModeMenu
+    } elseif ($input -eq "Q") {
+        return "QUIT"
+    } elseif ($input -match "^(\d+):([\d\-, ]+)$") {
+        $category = $matches[1]
+        $numbers = $matches[2]
+        
+        if (-not $categories.ContainsKey($category)) {
+            Write-Host "Invalid category number." -ForegroundColor Red
+            Pause
+            Show-FileNumberInput
+            return
+        }
+        
+        $selectedIndices = @()
+        $numberParts = $numbers -split ',' | ForEach-Object { $_.Trim() }
+        
+        foreach $part in $numberParts) {
+            if ($part -match "^(\d+)-(\d+)$") {
+                $start = [int]$matches[1] - 1
+                $end = [int]$matches[2] - 1
+                if ($start -le $end -and $end -lt $categories[$category].Files.Count) {
+                    $selectedIndices += $start..$end
+                }
+            } elseif ($part -match "^\d+$") {
+                $index = [int]$part - 1
+                if ($index -ge 0 -and $index -lt $categories[$category].Files.Count) {
+                    $selectedIndices += $index
+                }
+            }
+        }
+        
+        $selectedIndices = $selectedIndices | Sort-Object -Unique
+        
+        if ($selectedIndices.Count -eq 0) {
+            Write-Host "No valid files selected." -ForegroundColor Red
+            Pause
+            Show-FileNumberInput
+            return
+        }
+        
+        $filesToDownload = @()
+        foreach ($i in $selectedIndices) {
+            $file = $categories[$category].Files[$i]
+            $filesToDownload += [PSCustomObject]@{
+                Category = $categories[$category].Name
+                Name = $file.Name
+                Url = $file.Url
+            }
+        }
+        
+        Download-MultipleFiles -files $filesToDownload
+    } else {
+        Write-Host "Invalid input format." -ForegroundColor Red
+        Pause
+        Show-FileNumberInput
+    }
+}
+
+# Update main menu to include new options
+function Show-MainMenu {
+    Clear-Host
+    Write-Host "============================================="
+    Write-Host "    WINDOWS SOFTWARE DOWNLOADER UTILITY      "
+    Write-Host "============================================="
+    Write-Host "Repository: $repoUrl"
+    Write-Host "Download Path: $downloadPath"
+    Write-Host "---------------------------------------------"
+    Write-Host "Available Categories:"
+    foreach ($key in $categories.Keys | Sort-Object) {
+        Write-Host " $key. $($categories[$key].Name) - $($categories[$key].Description)"
+    }
+    Write-Host "---------------------------------------------"
+    Write-Host " S. Search for software"
+    Write-Host " B. Batch download mode"
+    Write-Host " C. Change download path"
+    Write-Host " Q. Quit"
+    Write-Host "============================================="
+}
+
+# Update main program loop to handle new options
+$running = $true
+while ($running) {
+    Show-MainMenu
+    $choice = Read-Host "Enter your choice"
+    
+    switch ($choice) {
+        { $_ -in "1","2","3","4","5" } {
+            $selectedCategory = $choice
+            Show-SoftwareMenu -category $choice
+            
+            $softwareChoice = Read-Host "Enter software number to download (or B to go back)"
+            
+            if ($softwareChoice -eq "B") {
+                continue
+            } elseif ($softwareChoice -eq "Q") {
+                $running = $false
+                break
+            } elseif ($softwareChoice -match "^\d+$") {
+                $index = [int]$softwareChoice - 1
+                if ($index -ge 0 -and $index -lt $categories[$choice].Files.Count) {
+                    $selectedFile = $categories[$choice].Files[$index]
+                    $fileToDownload = [PSCustomObject]@{
+                        Category = $categories[$choice].Name
+                        Name = $selectedFile.Name
+                        Url = $selectedFile.Url
+                    }
+                    Download-MultipleFiles -files @($fileToDownload)
+                } else {
+                    Write-Host "Invalid selection." -ForegroundColor Red
+                    Pause
+                }
+            } else {
+                Write-Host "Invalid selection." -ForegroundColor Red
+                Pause
+            }
+        }
+        "S" {
+            $searchTerm = Read-Host "Enter search term"
+            if (-not [string]::IsNullOrWhiteSpace($searchTerm)) {
+                $results = Search-Software -searchTerm $searchTerm
+                $action = Show-SearchResults -results $results
+                if ($action -eq "QUIT") {
+                    $running = $false
+                }
+            }
+        }
+        "B" {
+            $action = Show-BatchModeMenu
+            if ($action -eq "QUIT") {
+                $running = $false
+            }
+        }
+        "C" {
+            Set-DownloadPath
+        }
+        "Q" {
+            $running = $false
+        }
+        default {
+            Write-Host "Invalid choice. Please try again." -ForegroundColor Red
+            Pause
+        }
+    }
+}
+
+Write-Host "Thank you for using Windows Software Downloader Utility!"
+Write-Log "Application closed"
