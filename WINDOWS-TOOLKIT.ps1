@@ -973,7 +973,7 @@ function Show-FileNumberInput {
         $selectedIndices = @()
         $numberParts = $numbers -split ',' | ForEach-Object { $_.Trim() }
         
-        foreach $part in $numberParts) {
+        foreach ($part in $numberParts) {
             if ($part -match "^(\d+)-(\d+)$") {
                 $start = [int]$matches[1] - 1
                 $end = [int]$matches[2] - 1
