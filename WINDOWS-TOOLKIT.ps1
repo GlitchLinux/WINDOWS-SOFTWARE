@@ -325,6 +325,8 @@ $categories = @{
             @{Name="USBLockit.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/USBLockit.exe"},
             @{Name="usb-secure-pd.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/usb-secure-pd.exe"},
             @{Name="usb-stick-encryption.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/usb-stick-encryption.exe"},
+            @{Name="Microsoft_Visual_C++2015-2022_x64.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/Microsoft_Visual_C++2015-2022_x64.exe"},
+            @{Name="Microsoft_Visual_C++2015-2022_x86.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/Microsoft_Visual_C++2015-2022_x86.exe"},
             @{Name="VeraCrypt Setup 1.25.9.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/VeraCrypt%20Setup%201.25.9.exe"},
             @{Name="vlc-3.0.18-win64.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/vlc-3.0.18-win64.exe"},
             @{Name="vso_downloader_win64_setup_6.0.0.113.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/vso_downloader_win64_setup_6.0.0.113.exe"},
