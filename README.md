@@ -1,6 +1,6 @@
 # WIN-Toolkit - Windows CLI Software Utility
 
-![Image](https://github.com/user-attachments/assets/640abb0b-d73b-446c-9396-89877f378c39)
+![Image](https://github.com/user-attachments/assets/e2219dbd-489c-4d31-bd39-95a59741aea6)
 
 A comprehensive tool for downloading essential Windows software from a curated collection. Choose from three convenient launch methods.
 
