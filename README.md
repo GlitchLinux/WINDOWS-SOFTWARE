@@ -1,6 +1,6 @@
 # Windows Software Downloader Utility
 
-![Utility Screenshot](https://via.placeholder.com/800x400?text=Windows+Software+Downloader+Screenshot)
+![Image](https://github.com/user-attachments/assets/4a5a423d-a16e-4f45-81de-e6829f89006b)
 
 ## ⚠️ IMPORTANT LEGAL DISCLAIMER
 
