@@ -1,7 +1,5 @@
 # Windows Software Downloader Utility
 
-![Image](https://github.com/user-attachments/assets/821215dc-2e3a-44e8-b6e3-9644ff6105b5)
-
 ## 🚀 Launch Options
 
 ### Method 1: EXE Launcher (Recommended)
@@ -22,7 +20,7 @@
 # Run in PowerShell (admin)
 irm https://raw.githubusercontent.com/GlitchLinux/WINDOWS-SOFTWARE/main/WINDOWS-TOOLKIT.ps1 | iex
 ```
-![Image](https://github.com/user-attachments/assets/93382520-2ee5-48a8-b875-fc681ac5f2db)
+![Screenshot 2025-06-08 235020](https://github.com/user-attachments/assets/6746cc8c-4b54-4296-8336-c8c0fa6e44d1)
 
 ## 🔍 Content Verification Policy
 
