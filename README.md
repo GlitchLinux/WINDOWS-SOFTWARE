@@ -20,7 +20,7 @@ A comprehensive tool for downloading essential Windows software from a curated c
 ## 🚀 Launch Options
 
 ### Method 1: EXE Launcher (Recommended)
-```markdown
+
 1. Download: [WIN-Toolkit.exe](https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/WIN-Toolkit.exe)
 2. Right-click → "Run as administrator"
 3. Follow on-screen prompts
@@ -28,10 +28,10 @@ A comprehensive tool for downloading essential Windows software from a curated c
 ▶ **Best for**: Most users who want simple one-click operation
 
 ### Method 2: Batch File
-```markdown
+
 1. Download: [WIN-Toolkit.bat](https://raw.githubusercontent.com/GlitchLinux/WINDOWS-SOFTWARE/refs/heads/main/WIN-Toolkit.bat)
 2. Right-click → "Run as administrator"
-```
+
 ▶ **Best for**: Users who prefer batch scripts or need to inspect the code
 
 ### Method 3: Direct PowerShell
