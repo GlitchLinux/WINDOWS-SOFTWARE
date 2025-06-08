@@ -1,4 +1,4 @@
-# Windows Software Downloader Utility
+# Windows Software CLI Utility
 
 ## 🚀 Launch Options
 
