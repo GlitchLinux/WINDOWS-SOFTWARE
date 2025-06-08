@@ -1,4 +1,3 @@
-```markdown
 # Windows Software Downloader Utility
 
 ![Utility Screenshot](https://via.placeholder.com/800x400?text=Windows+Software+Downloader+Screenshot)
@@ -25,7 +24,7 @@ A comprehensive tool for downloading essential Windows software from a curated c
 1. Download: [WIN-Toolkit.exe](https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/WIN-Toolkit.exe)
 2. Right-click → "Run as administrator"
 3. Follow on-screen prompts
-```
+
 ▶ **Best for**: Most users who want simple one-click operation
 
 ### Method 2: Batch File
