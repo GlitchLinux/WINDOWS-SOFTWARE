@@ -1,6 +1,6 @@
 # Windows Software Downloader Utility
 
-![Image](https://github.com/user-attachments/assets/4a5a423d-a16e-4f45-81de-e6829f89006b)
+![Image](https://github.com/user-attachments/assets/f7a6cc88-7a02-4214-8ece-adbd31ee97d4)
 
 ## ⚠️ IMPORTANT LEGAL DISCLAIMER
 
