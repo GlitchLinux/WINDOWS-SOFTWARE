@@ -1,6 +1,13 @@
 # WIN-Toolkit - Windows CLI Software Utility
 
-![Image](https://github.com/user-attachments/assets/09c9c4e0-c7c5-47ca-8d73-81743c54c0ec) ![Image](https://github.com/user-attachments/assets/e2219dbd-489c-4d31-bd39-95a59741aea6)
+![Image](https://github.com/user-attachments/assets/09c9c4e0-c7c5-47ca-8d73-81743c54c0ec) | Category | Description | Example Tools |
+|----------|-------------|---------------|
+| **Partition Tools** | Disk management utilities | 7-Zip, DiskGenius, HDD Regenerator |
+| **System Recovery** | Repair and maintenance tools | Active Partition Recovery, CCleaner |
+| **Executable Tools** | Ready-to-run applications | Rufus, CPU-Z, HWiNFO |
+| **Boot Utilities** | Installation and setup tools | WinNTSetup, EasyUEFI |
+| **Portable Apps** | No-install needed software | IrfanView, SumatraPDF |
+ ![Image](https://github.com/user-attachments/assets/e2219dbd-489c-4d31-bd39-95a59741aea6)
 
 A comprehensive tool for downloading essential Windows software from a curated collection. Choose from three convenient launch methods.
 
