@@ -1,90 +1,6 @@
-# WIN-Toolkit - Windows CLI Software Utility
+# Windows Software Downloader Utility
 
-A comprehensive tool for downloading essential Windows software from a curated collection. Choose from three convenient launch methods.
-
-![Image](https://github.com/user-attachments/assets/75684966-d657-4c7a-a787-66956658a616)
-
-## 🚀 Launch Options
-
-### Method 1: EXE Launcher (Recommended)
-
-1. Download: [WIN-Toolkit.exe](https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/WIN-Toolkit.exe) 
-
-2. Right-click → "Run as administrator"
-3. Follow on-screen prompts
-
-▶ **Best for**: Most users who want simple one-click operation
-
-### Method 2: Batch File
-
-1. Download: [WIN-Toolkit.bat](https://raw.githubusercontent.com/GlitchLinux/WINDOWS-SOFTWARE/refs/heads/main/WIN-Toolkit.bat)
-2. Right-click → "Run as administrator"
-
-▶ **Best for**: Users who prefer batch scripts or need to inspect the code
-
-### Method 3: Direct PowerShell
-```powershell
-# Run in PowerShell (admin):
-irm https://raw.githubusercontent.com/GlitchLinux/WINDOWS-SOFTWARE/main/WINDOWS-TOOLKIT.ps1 | iex
-```
-▶ **Best for**: Advanced users and automated deployments
-
-![Image](https://github.com/user-attachments/assets/1d760d90-cd7b-4e41-8d43-40852e85da4b)
-
-## 📦 Software Categories
-
-| Category | Description | Example Tools |
-|----------|-------------|---------------|
-| **Partition Tools** | Disk management utilities | 7-Zip, DiskGenius, HDD Regenerator |
-| **System Recovery** | Repair and maintenance tools | Active Partition Recovery, CCleaner |
-| **Executable Tools** | Ready-to-run applications | Rufus, CPU-Z, HWiNFO |
-| **Boot Utilities** | Installation and setup tools | WinNTSetup, EasyUEFI |
-| **Portable Apps** | No-install needed software | IrfanView, SumatraPDF |
-
-## 🔧 Requirements
-
-- Windows 7/10/11 (x64 recommended)
-- PowerShell 5.1+
-- Administrator rights (for full functionality)
-- 50MB+ free disk space
-
-## ⚠️ Safety First
-
-1. Always verify downloaded files with antivirus software
-2. The toolkit requires admin rights to:
-   - Install system utilities
-   - Modify protected directories
-   - Access disk management tools
-
-## 🔍 Troubleshooting
-
-### Common Issues & Solutions
-
-| Issue | Solution |
-|-------|----------|
-| "Execution restricted" | Run `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser` |
-| Downloads fail | Check firewall/antivirus settings |
-| Missing features | Run as administrator |
-| 7-Zip functions unavailable | [Install 7-Zip](https://www.7-zip.org/) |
-
-## 🤝 Contributing
-
-To add software to the collection:
-
-1. Fork the repository
-2. Add entries to `WINDOWS-TOOLKIT.ps1` following the existing format:
-   ```powershell
-   @{Name="ToolName"; Url="https://direct-download-link"}
-   ```
-3. Submit a pull request
-
-## 📜 License
-
-MIT License - See [LICENSE](LICENSE) for full details.
-
----
-
-> 💡 **Tip**: For fastest performance, use the EXE launcher and ensure your download directory is on an SSD.
+![Utility Screenshot](https://via.placeholder.com/800x400?text=Windows+Software+Downloader+Screenshot)
 
 ## ⚠️ IMPORTANT LEGAL DISCLAIMER
 
@@ -98,3 +14,61 @@ MIT License - See [LICENSE](LICENSE) for full details.
 1. You are solely responsible for verifying software licenses
 2. Some tools may require separate legal licenses
 3. The maintainers merely provide download links, not software ownership
+
+## 🚀 Launch Options
+
+### Method 1: EXE Launcher (Recommended)
+
+1. Download: [WIN-Toolkit.exe](https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/WIN-Toolkit.exe)
+2. Right-click → "Run as administrator"
+3. Accept the security warning (if shown)
+
+
+### Method 2: Batch File
+
+1. Download: [WIN-Toolkit.bat](https://raw.githubusercontent.com/GlitchLinux/WINDOWS-SOFTWARE/refs/heads/main/WIN-Toolkit.bat)
+2. Right-click → "Run as administrator"
+
+
+### Method 3: Direct PowerShel
+```powershell
+# Run in PowerShell (admin)
+irm https://raw.githubusercontent.com/GlitchLinux/WINDOWS-SOFTWARE/main/WINDOWS-TOOLKIT.ps1 | iex
+```
+
+## 🔍 Content Verification Policy
+
+1. **No Endorsement**:  
+   Inclusion of software ≠ endorsement of legality
+2. **User Responsibility**:  
+   You must verify:
+   - License requirements
+   - Terms of use
+   - Distribution rights
+3. **Reporting**:  
+   Open an Issue if you find:
+   - Clearly pirated software
+   - Malicious content
+   - Copyright violations
+
+## 📦 Software Categories
+
+| Category | Legal Notes |
+|----------|-------------|
+| Partition Tools | Some tools may require commercial licenses for business use |
+| System Recovery | Check EULAs for data recovery tools |
+| Boot Utilities | Certain features may violate OEM warranties |
+
+## 🛡️ Safe Usage Guidelines
+
+1. Always scan downloads with VirusTotal
+2. Consult software licenses before use
+3. For business environments:
+   - Obtain proper licenses
+   - Consult your IT department
+   - Review compliance requirements
+
+## 📜 License
+
+This utility's code is MIT licensed, but **this does not apply** to downloaded software. Each downloaded program maintains its original license.
+```
