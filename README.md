@@ -20,8 +20,6 @@
 # Run in PowerShell (admin)
 irm https://raw.githubusercontent.com/GlitchLinux/WINDOWS-SOFTWARE/main/WINDOWS-TOOLKIT.ps1 | iex
 ```
-![Screenshot 2025-06-08 235020](https://github.com/user-attachments/assets/6746cc8c-4b54-4296-8336-c8c0fa6e44d1)
-
 ## 🔍 Content Verification Policy
 
 1. **No Endorsement**:  
