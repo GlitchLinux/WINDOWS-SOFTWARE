@@ -1,5 +1,3 @@
-![Image](https://github.com/user-attachments/assets/09c9c4e0-c7c5-47ca-8d73-81743c54c0ec)
-
 # WIN-Toolkit - Windows CLI Software Utility
 
 ![Image](https://github.com/user-attachments/assets/e2219dbd-489c-4d31-bd39-95a59741aea6)
@@ -7,6 +5,8 @@
 A comprehensive tool for downloading essential Windows software from a curated collection. Choose from three convenient launch methods.
 
 ## 🚀 Launch Options
+
+![Image](https://github.com/user-attachments/assets/09c9c4e0-c7c5-47ca-8d73-81743c54c0ec)
 
 ### Method 1: EXE Launcher (Recommended)
 
