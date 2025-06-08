@@ -23,7 +23,7 @@ A comprehensive tool for downloading essential Windows software from a curated c
 
 ▶ **Best for**: Users who prefer batch scripts or need to inspect the code
 
-![Image](https://github.com/user-attachments/assets/20ea55d0-a68f-47a7-a9dd-4d99e485950b)
+![Image](https://github.com/user-attachments/assets/ed60598c-4c5b-490a-9299-d2c8ab3124ab)
 
 ### Method 3: Direct PowerShell
 ```powershell
