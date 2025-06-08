@@ -2,7 +2,7 @@
 
 A comprehensive tool for downloading essential Windows software from a curated collection. Choose from three convenient launch methods.
 
-![Image](https://github.com/user-attachments/assets/6feec703-6590-4503-bb5f-b59c00b3fb34)
+![Image](https://github.com/user-attachments/assets/75684966-d657-4c7a-a787-66956658a616)
 
 ## 🚀 Launch Options
 
