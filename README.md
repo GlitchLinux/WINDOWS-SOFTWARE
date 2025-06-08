@@ -1,4 +1,4 @@
-# Windows Software Downloader Utility
+# WIN-Toolkit - Windows CLI Software Utility
 
 ![Utility Screenshot](https://via.placeholder.com/800x400?text=Windows+Software+Downloader+Screenshot)
 
