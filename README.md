@@ -1,6 +1,6 @@
 # WIN-Toolkit - Windows CLI Software Utility
 
-![Utility Screenshot](https://via.placeholder.com/800x400?text=Windows+Software+Downloader+Screenshot)
+![Image](https://github.com/user-attachments/assets/640abb0b-d73b-446c-9396-89877f378c39)
 
 A comprehensive tool for downloading essential Windows software from a curated collection. Choose from three convenient launch methods.
 
@@ -22,6 +22,8 @@ A comprehensive tool for downloading essential Windows software from a curated c
 2. Right-click → "Run as administrator"
 
 ▶ **Best for**: Users who prefer batch scripts or need to inspect the code
+
+![Image](https://github.com/user-attachments/assets/20ea55d0-a68f-47a7-a9dd-4d99e485950b)
 
 ### Method 3: Direct PowerShell
 ```powershell
