@@ -2,6 +2,8 @@
 
 A comprehensive tool for downloading essential Windows software from a curated collection. Choose from three convenient launch methods.
 
+![Image](https://github.com/user-attachments/assets/6feec703-6590-4503-bb5f-b59c00b3fb34)
+
 ## 🚀 Launch Options
 
 ![Image](https://github.com/user-attachments/assets/1d760d90-cd7b-4e41-8d43-40852e85da4b)
@@ -22,16 +24,12 @@ A comprehensive tool for downloading essential Windows software from a curated c
 
 ▶ **Best for**: Users who prefer batch scripts or need to inspect the code
 
-![Image](https://github.com/user-attachments/assets/ed60598c-4c5b-490a-9299-d2c8ab3124ab)
-
 ### Method 3: Direct PowerShell
 ```powershell
 # Run in PowerShell (admin):
 irm https://raw.githubusercontent.com/GlitchLinux/WINDOWS-SOFTWARE/main/WINDOWS-TOOLKIT.ps1 | iex
 ```
 ▶ **Best for**: Advanced users and automated deployments
-
-![Image](https://github.com/user-attachments/assets/09c9c4e0-c7c5-47ca-8d73-81743c54c0ec) ![Image](https://github.com/user-attachments/assets/09c9c4e0-c7c5-47ca-8d73-81743c54c0ec) ![Image](https://github.com/user-attachments/assets/09c9c4e0-c7c5-47ca-8d73-81743c54c0ec) ![Image](https://github.com/user-attachments/assets/09c9c4e0-c7c5-47ca-8d73-81743c54c0ec)
 
 ## 📦 Software Categories
 
