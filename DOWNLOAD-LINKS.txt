@@ -1,6 +1,8 @@
 RAW DOWNLOAD LINKS FOR EVERY INDIVIDUAL FILE: 
 
 https://raw.githubusercontent.com/GlitchLinux/WINDOWS-SOFTWARE/refs/heads/main/DOWNLOAD-LINKS.txt
+https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/Microsoft_Visual_C++2015-2022_x64.exe
+https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/Microsoft_Visual_C++2015-2022_x86.exe
 https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT5/xmrig-6.19.2-gcc-win64.zip
 https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT5/wsl2-distro-manager-v1.8.11.zip
 https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT5/win10script-master.zip
