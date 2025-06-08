@@ -15,7 +15,7 @@
 2. Right-click → "Run as administrator"
 
 
-### Method 3: Direct PowerShel
+### Method 3: Direct PowerShell
 ```powershell
 # Run in PowerShell (admin)
 irm https://raw.githubusercontent.com/GlitchLinux/WINDOWS-SOFTWARE/main/WINDOWS-TOOLKIT.ps1 | iex
