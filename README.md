@@ -4,7 +4,7 @@ A comprehensive tool for downloading essential Windows software from a curated c
 
 ## 🚀 Launch Options
 
-![Image](https://github.com/user-attachments/assets/29329f9f-9396-4348-ac40-0b1a3c74bf4a)
+![Image](https://github.com/user-attachments/assets/1d760d90-cd7b-4e41-8d43-40852e85da4b)
 
 ### Method 1: EXE Launcher (Recommended)
 
