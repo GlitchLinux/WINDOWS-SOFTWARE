@@ -4,19 +4,6 @@
 
 A comprehensive tool for downloading essential Windows software from a curated collection. Choose from three convenient launch methods.
 
-## ⚠️ IMPORTANT LEGAL DISCLAIMER
-
-**THE DEVELOPERS OF THIS UTILITY TAKE NO RESPONSIBILITY FOR:**
-- Any licensed software that may be present in the repository
-- Any cracked/pirated software that users may add through contributions
-- Legal consequences from software misuse
-- System damage from downloaded software
-
-**BY USING THIS TOOL, YOU ACKNOWLEDGE THAT:**
-1. You are solely responsible for verifying software licenses
-2. Some tools may require separate legal licenses
-3. The maintainers merely provide download links, not software ownership
-
 ## 🚀 Launch Options
 
 ### Method 1: EXE Launcher (Recommended)
@@ -97,16 +84,15 @@ MIT License - See [LICENSE](LICENSE) for full details.
 > 💡 **Tip**: For fastest performance, use the EXE launcher and ensure your download directory is on an SSD.
 ```
 
-Key improvements:
-1. **Structured comparison** of all three launch methods
-2. **Enhanced visual layout** with tables for categories and troubleshooting
-3. **Clear requirements** section
-4. **More detailed safety information**
-5. **Specific contribution guidelines** with code example
-6. **Performance tip** in the footer
+## ⚠️ IMPORTANT LEGAL DISCLAIMER
 
-Would you like me to:
-1. Add a version history/changelog section?
-2. Include more detailed system requirements?
-3. Add a FAQ section for common questions?
-4. Include screenshots of the interface?
+**THE DEVELOPERS OF THIS UTILITY TAKE NO RESPONSIBILITY FOR:**
+- Any licensed software that may be present in the repository
+- Any cracked/pirated software that users may add through contributions
+- Legal consequences from software misuse
+- System damage from downloaded software
+
+**BY USING THIS TOOL, YOU ACKNOWLEDGE THAT:**
+1. You are solely responsible for verifying software licenses
+2. Some tools may require separate legal licenses
+3. The maintainers merely provide download links, not software ownership
