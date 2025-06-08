@@ -82,7 +82,6 @@ MIT License - See [LICENSE](LICENSE) for full details.
 ---
 
 > 💡 **Tip**: For fastest performance, use the EXE launcher and ensure your download directory is on an SSD.
-```
 
 ## ⚠️ IMPORTANT LEGAL DISCLAIMER
 
