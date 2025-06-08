@@ -6,8 +6,6 @@ A comprehensive tool for downloading essential Windows software from a curated c
 
 ## 🚀 Launch Options
 
-![Image](https://github.com/user-attachments/assets/1d760d90-cd7b-4e41-8d43-40852e85da4b)
-
 ### Method 1: EXE Launcher (Recommended)
 
 1. Download: [WIN-Toolkit.exe](https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/WIN-Toolkit.exe) 
@@ -30,6 +28,8 @@ A comprehensive tool for downloading essential Windows software from a curated c
 irm https://raw.githubusercontent.com/GlitchLinux/WINDOWS-SOFTWARE/main/WINDOWS-TOOLKIT.ps1 | iex
 ```
 ▶ **Best for**: Advanced users and automated deployments
+
+![Image](https://github.com/user-attachments/assets/1d760d90-cd7b-4e41-8d43-40852e85da4b)
 
 ## 📦 Software Categories
 
