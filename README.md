@@ -31,7 +31,7 @@ irm https://raw.githubusercontent.com/GlitchLinux/WINDOWS-SOFTWARE/main/WINDOWS-
 ```
 ▶ **Best for**: Advanced users and automated deployments
 
-![Image](https://github.com/user-attachments/assets/09c9c4e0-c7c5-47ca-8d73-81743c54c0ec) ![Image](https://github.com/user-attachments/assets/09c9c4e0-c7c5-47ca-8d73-81743c54c0ec) ![Image](https://github.com/user-attachments/assets/09c9c4e0-c7c5-47ca-8d73-81743c54c0ec)
+![Image](https://github.com/user-attachments/assets/09c9c4e0-c7c5-47ca-8d73-81743c54c0ec) ![Image](https://github.com/user-attachments/assets/09c9c4e0-c7c5-47ca-8d73-81743c54c0ec) ![Image](https://github.com/user-attachments/assets/09c9c4e0-c7c5-47ca-8d73-81743c54c0ec) ![Image](https://github.com/user-attachments/assets/09c9c4e0-c7c5-47ca-8d73-81743c54c0ec)
 
 ## 📦 Software Categories
 
