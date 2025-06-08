@@ -2,19 +2,6 @@
 
 ![Image](https://github.com/user-attachments/assets/f7a6cc88-7a02-4214-8ece-adbd31ee97d4)
 
-## ⚠️ IMPORTANT LEGAL DISCLAIMER
-
-**THE DEVELOPERS OF THIS UTILITY TAKE NO RESPONSIBILITY FOR:**
-- Any licensed software that may be present in the repository
-- Any cracked/pirated software that users may add through contributions
-- Legal consequences from software misuse
-- System damage from downloaded software
-
-**BY USING THIS TOOL, YOU ACKNOWLEDGE THAT:**
-1. You are solely responsible for verifying software licenses
-2. Some tools may require separate legal licenses
-3. The maintainers merely provide download links, not software ownership
-
 ## 🚀 Launch Options
 
 ### Method 1: EXE Launcher (Recommended)
@@ -71,4 +58,16 @@ irm https://raw.githubusercontent.com/GlitchLinux/WINDOWS-SOFTWARE/main/WINDOWS-
 ## 📜 License
 
 This utility's code is MIT licensed, but **this does not apply** to downloaded software. Each downloaded program maintains its original license.
-```
+
+## ⚠️ IMPORTANT LEGAL DISCLAIMER
+
+**THE DEVELOPERS OF THIS UTILITY TAKE NO RESPONSIBILITY FOR:**
+- Any licensed software that may be present in the repository
+- Any cracked/pirated software that users may add through contributions
+- Legal consequences from software misuse
+- System damage from downloaded software
+
+**BY USING THIS TOOL, YOU ACKNOWLEDGE THAT:**
+1. You are solely responsible for verifying software licenses
+2. Some tools may require separate legal licenses
+3. The maintainers merely provide download links, not software ownership
