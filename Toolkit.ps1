@@ -21,7 +21,7 @@ $softwareList = @()
 $selectedCategory = $null
 $downloadPath = $defaultDownloadPath
 $currentPage = 1
-$itemsPerPage = [math]::Floor(([console]::WindowHeight - 15) # Dynamic based on window size
+$itemsPerPage = [math]::Floor(([console]::WindowHeight - 15)) # Dynamic based on window size
 
 # Create a hashtable to map the folder structure with direct download links
 $categories = @{
@@ -634,7 +634,7 @@ $categories = @{
             @{Name="TelegramDesktopPortable_5.14.3.paf.exe"; Url="https://portableapps.com/downloading/?a=TelegramDesktopPortable&s=s&p=&d=pa&n=Telegram Desktop Portable&f=TelegramDesktopPortable_5.14.3.paf.exe"},
             @{Name="TransmissionPortable_4.0.6.paf.exe"; Url="https://portableapps.com/downloading/?a=TransmissionPortable&s=s&p=&d=pa&n=Transmission Portable&f=TransmissionPortable_4.0.6.paf.exe"},
             @{Name="uGetPortable_2.2.3-2.2.paf.exe"; Url="https://portableapps.com/downloading/?a=uGetPortable&s=s&p=&d=pa&n=uGet Portable&f=uGetPortable_2.2.3-2.2.paf.exe"},
-            @{Name="uTorrentPortable_3.6.0.46896_online.paf.exe"; Url="https://portableapps.com/downloading/?a=uTorrentPortable&s=s&p=&d=pa&n=ÂµTorrent Portable&f=uTorrentPortable_3.6.0.46896_online.paf.exe"},
+            @{Name="uTorrentPortable_3.6.0.46896_online.paf.exe"; Url="https://portableapps.com/downloading/?a=uTorrentPortable&s=s&p=&d=pa&n=Ã‚ÂµTorrent Portable&f=uTorrentPortable_3.6.0.46896_online.paf.exe"},
             @{Name="WackGetPortable_1.2.4_Rev_2_English.paf.exe"; Url="https://portableapps.com/downloading/?a=WackGetPortable&s=s&p=&d=pa&n=WackGet Portable&f=WackGetPortable_1.2.4_Rev_2_English.paf.exe"},
             @{Name="WhalebirdPortable_6.2.2.paf.exe"; Url="https://portableapps.com/downloading/?a=WhalebirdPortable&s=s&p=&d=pa&n=Whalebird Portable&f=WhalebirdPortable_6.2.2.paf.exe"},
             @{Name="WinSCPPortable_6.5.1.paf.exe"; Url="https://portableapps.com/downloading/?a=WinSCPPortable&s=s&p=&d=pa&n=WinSCP Portable&f=WinSCPPortable_6.5.1.paf.exe"},
@@ -983,33 +983,25 @@ function Show-MainMenu {
 function Show-CategoryMenu {
     Show-Header -title "SOFTWARE CATEGORIES" -subtitle "Select a category to browse"
     
-    $sortedCategories = $categories.Keys | Sort-Object
-    $columnWidth = 30
-    $cols = [math]::Floor([console]::WindowWidth / ($columnWidth + 4))
-    $rows = [math]::Ceiling($sortedCategories.Count / $cols)
-    
-    for ($i = 0; $i -lt $rows; $i++) {
-        for ($j = 0; $j -lt $cols; $j++) {
-            $index = $i + ($j * $rows)
-            if ($index -lt $sortedCategories.Count) {
-                $key = $sortedCategories[$index]
-                $num = $key.PadLeft(2)
-                $name = $categories[$key].Name
-                if ($name.Length -gt $columnWidth - 4) {
-                    $name = $name.Substring(0, $columnWidth - 4) + "..."
-                }
-                Write-Host " $num. $($name.PadRight($columnWidth - 4))" -NoNewline
-            }
-        }
-        Write-Host ""
+    # Display categories with numbers
+    $i = 1
+    foreach ($key in $categories.Keys | Sort-Object) {
+        Write-Host "$($i.ToString().PadLeft(2)). $($categories[$key].Name) - $($categories[$key].Description)"
+        $i++
     }
     
-    Write-Host "---------------------------------------------" -ForegroundColor DarkGray
+    Write-Host "---------------------------------------------"
     Write-Host "B. Back to Main Menu"
     Write-Host "Q. Quit"
-    Write-Host "=============================================" -ForegroundColor Cyan
+    Write-Host "============================================="
     
     $choice = Read-Host "`nEnter category number"
+    
+    # Map numeric input to category key
+    $sortedKeys = $categories.Keys | Sort-Object
+    if ($choice -match "^\d+$" -and [int]$choice -le $sortedKeys.Count -and [int]$choice -ge 1) {
+        return $sortedKeys[[int]$choice - 1]
+    }
     return $choice
 }
 
@@ -1019,31 +1011,34 @@ function Show-SoftwareList {
         [int]$page = 1
     )
     
+    # Check if category exists and has files
+    if (-not $categories.ContainsKey($category)) {
+        Write-Host "Invalid category selected!" -ForegroundColor Red
+        Pause
+        return "B", $page
+    }
+    
     $files = $categories[$category].Files
+    if ($files.Count -eq 0) {
+        Show-Header -title "$($categories[$category].Name.ToUpper())" -subtitle "No files available in this category"
+        Write-Host "---------------------------------------------" -ForegroundColor DarkGray
+        Write-Host "This category currently contains no files."
+        Write-Host "B. Back to Categories"
+        Write-Host "=============================================" -ForegroundColor Cyan
+        $choice = Read-Host "`nEnter your choice"
+        return $choice, $page
+    }
+    
     $totalPages = [math]::Ceiling($files.Count / $itemsPerPage)
     $startIndex = ($page - 1) * $itemsPerPage
     $endIndex = [math]::Min($startIndex + $itemsPerPage - 1, $files.Count - 1)
     
     Show-Header -title "$($categories[$category].Name.ToUpper())" -subtitle "$($categories[$category].Description) | Page $page of $totalPages"
     
-    # Display files in columns
-    $columnWidth = 40
-    $cols = [math]::Floor([console]::WindowWidth / ($columnWidth + 4))
-    $rows = [math]::Ceiling(($endIndex - $startIndex + 1) / $cols)
-    
-    for ($i = $startIndex; $i -le $endIndex; $i += $cols) {
-        for ($j = 0; $j -lt $cols; $j++) {
-            $index = $i + $j
-            if ($index -le $endIndex) {
-                $num = ($index - $startIndex + 1).ToString().PadLeft(3)
-                $name = $files[$index].Name
-                if ($name.Length -gt $columnWidth - 6) {
-                    $name = $name.Substring(0, $columnWidth - 6) + "..."
-                }
-                Write-Host " $num. $($name.PadRight($columnWidth - 6))" -NoNewline
-            }
-        }
-        Write-Host ""
+    # Display files with numbering
+    for ($i = $startIndex; $i -le $endIndex; $i++) {
+        $displayNum = ($i - $startIndex + 1).ToString().PadLeft(2)
+        Write-Host " $displayNum. $($files[$i].Name)"
     }
     
     Write-Host "---------------------------------------------" -ForegroundColor DarkGray
