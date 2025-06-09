@@ -628,7 +628,7 @@ $categories = @{
             @{Name="TelegramDesktopPortable_5.14.3.paf.exe"; Url="https://portableapps.com/downloading/?a=TelegramDesktopPortable&s=s&p=&d=pa&n=Telegram Desktop Portable&f=TelegramDesktopPortable_5.14.3.paf.exe"},
             @{Name="TransmissionPortable_4.0.6.paf.exe"; Url="https://portableapps.com/downloading/?a=TransmissionPortable&s=s&p=&d=pa&n=Transmission Portable&f=TransmissionPortable_4.0.6.paf.exe"},
             @{Name="uGetPortable_2.2.3-2.2.paf.exe"; Url="https://portableapps.com/downloading/?a=uGetPortable&s=s&p=&d=pa&n=uGet Portable&f=uGetPortable_2.2.3-2.2.paf.exe"},
-            @{Name="uTorrentPortable_3.6.0.46896_online.paf.exe"; Url="https://portableapps.com/downloading/?a=uTorrentPortable&s=s&p=&d=pa&n=Ã‚ÂµTorrent Portable&f=uTorrentPortable_3.6.0.46896_online.paf.exe"},
+            @{Name="uTorrentPortable_3.6.0.46896_online.paf.exe"; Url="https://portableapps.com/downloading/?a=uTorrentPortable&s=s&p=&d=pa&n=ÂµTorrent Portable&f=uTorrentPortable_3.6.0.46896_online.paf.exe"},
             @{Name="WackGetPortable_1.2.4_Rev_2_English.paf.exe"; Url="https://portableapps.com/downloading/?a=WackGetPortable&s=s&p=&d=pa&n=WackGet Portable&f=WackGetPortable_1.2.4_Rev_2_English.paf.exe"},
             @{Name="WhalebirdPortable_6.2.2.paf.exe"; Url="https://portableapps.com/downloading/?a=WhalebirdPortable&s=s&p=&d=pa&n=Whalebird Portable&f=WhalebirdPortable_6.2.2.paf.exe"},
             @{Name="WinSCPPortable_6.5.1.paf.exe"; Url="https://portableapps.com/downloading/?a=WinSCPPortable&s=s&p=&d=pa&n=WinSCP Portable&f=WinSCPPortable_6.5.1.paf.exe"},
@@ -1030,78 +1030,62 @@ function Download-Software {
         Write-Host "`nInitiating download for $fileName..."
         Write-Host "Source URL: $url"
         
-        # Step 1: Get the initial page to extract the real download URL
-        $ProgressPreference = 'SilentlyContinue'
-        $response = Invoke-WebRequest -Uri $url -UserAgent "Mozilla/5.0" -SessionVariable session
-        
-        # Extract the real download URL from the page (PortableApps.com specific)
-        $downloadUrl = $response.Links | 
-            Where-Object { $_.href -like "*/download/*" } | 
-            Select-Object -ExpandProperty href -First 1
-        
-        if (-not $downloadUrl) {
-            # Alternative pattern if the above doesn't work
-            $downloadUrl = [regex]::Match($response.Content, 'href="(https?://[^"]*download[^"]*)"').Groups[1].Value
-        }
-        
-        if (-not $downloadUrl) {
-            throw "Could not extract download URL from the portal page"
-        }
-        
-        Write-Host "Discovered actual download URL: $downloadUrl"
-        
-        # Step 2: Download the actual file with proper waiting
-        $webClient = New-Object System.Net.WebClient
-        $webClient.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
-        
-        # Create event handler for download progress
-        $global:downloadComplete = $false
-        $eventData = @{
-            FileName = $fileName
-            WebClient = $webClient
-        }
-        
-        Register-ObjectEvent -InputObject $webClient -EventName DownloadFileCompleted -Action {
-            $global:downloadComplete = $true
-            Write-Host "`nDownload completed!" -ForegroundColor Green
-        } -MessageData $eventData
-        
-        $webClient.DownloadProgressChanged.Add({
-            param($s, $e)
-            Write-Progress -Activity "Downloading $($event.FileName)" -Status "$($e.ProgressPercentage)%" -PercentComplete $e.ProgressPercentage
-        })
-        
-        Write-Host "Starting download (please wait 5-10 seconds for initiation)..."
-        $webClient.DownloadFileAsync([Uri]$downloadUrl, $destinationFile)
-        
-        # Wait for download to complete (max 5 minutes)
-        $waitTime = 0
-        while (-not $global:downloadComplete -and $waitTime -lt 300) {
-            Start-Sleep -Seconds 1
-            $waitTime++
-        }
-        
-        if (-not $global:downloadComplete) {
-            $webClient.CancelAsync()
-            throw "Download timed out after 5 minutes"
-        }
-        
-        # Verify the download
-        if (-not (Test-Path -Path $destinationFile)) {
-            throw "Downloaded file not found"
-        }
-        
-        $fileSize = (Get-Item $destinationFile).Length
-        if ($fileSize -lt 100KB) {
-            $content = Get-Content $destinationFile -Raw -ErrorAction SilentlyContinue
-            if ($content -match "<html") {
-                Remove-Item $destinationFile -Force
-                throw "Downloaded file is HTML (probably an error page)"
+        # Try multiple URL patterns until one works
+        $downloadUrls = @(
+            # Pattern 1: Standard PortableApps CDN
+            "https://download2.portableapps.com/portableapps/$($fileName -replace '_.*','')/$fileName",
+            
+            # Pattern 2: Online installer pattern
+            "https://download2.portableapps.com/portableapps/$($fileName -replace '(_online)?\.paf\.exe$','')/$fileName",
+            
+            # Pattern 3: App name without version
+            "https://download2.portableapps.com/portableapps/$($fileName -split '_')[0]/$fileName",
+            
+            # Original URL as last resort
+            $url
+        )
+
+        foreach ($downloadUrl in $downloadUrls) {
+            Write-Host "Trying URL: $downloadUrl"
+            
+            try {
+                # Try with BITS first
+                Start-BitsTransfer -Source $downloadUrl -Destination $destinationFile -ErrorAction Stop -Priority High
+                
+                # Verify download
+                if (Test-Path $destinationFile -PathType Leaf) {
+                    $fileSize = (Get-Item $destinationFile).Length
+                    if ($fileSize -gt 100KB) {
+                        Write-Host "Successfully downloaded via $([System.IO.Path]::GetFileName($downloadUrl))" -ForegroundColor Green
+                        return $destinationFile
+                    }
+                    Remove-Item $destinationFile -Force
+                }
+            } catch {
+                Write-Host "Attempt failed: $($_.Exception.Message)" -ForegroundColor Yellow
             }
         }
-        
-        Write-Host "Successfully downloaded: $destinationFile ($([math]::Round($fileSize/1MB, 2)) MB" -ForegroundColor Green
-        return $destinationFile
+
+        # If all patterns failed, try with browser emulation
+        Write-Host "Attempting browser-emulated download..."
+        try {
+            $ProgressPreference = 'SilentlyContinue'
+            $response = Invoke-WebRequest -Uri $url -UserAgent "Mozilla/5.0" -MaximumRedirection 10 -TimeoutSec 60 -ErrorAction Stop
+            
+            # Check if we got a real file
+            if ($response.Headers['Content-Type'] -like 'application/*' -or 
+                $response.Headers['Content-Type'] -like 'binary/*') {
+                [System.IO.File]::WriteAllBytes($destinationFile, $response.Content)
+                return $destinationFile
+            } else {
+                throw "Server returned non-file content"
+            }
+        } catch {
+            Write-Host "Browser emulation failed: $_" -ForegroundColor Red
+            throw "All download methods failed"
+        } finally {
+            $ProgressPreference = 'Continue'
+        }
         
     } catch {
         Write-Host "`nERROR: $_" -ForegroundColor Red
@@ -1109,11 +1093,6 @@ function Download-Software {
             Remove-Item $destinationFile -Force
         }
         return $null
-    } finally {
-        $ProgressPreference = 'Continue'
-        if ($webClient -ne $null) {
-            $webClient.Dispose()
-        }
     }
 }
 function Process-DownloadedFile {
