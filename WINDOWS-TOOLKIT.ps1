@@ -377,9 +377,6 @@ $categories = @{
             @{Name="xmrig-6.19.2-gcc-win64.zip"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT5/xmrig-6.19.2-gcc-win64.zip"}
         )
     }
-}
-
-
 ﻿    "6" = @{ 
         Name = "PT6"; 
         Description = "Accessibility";
