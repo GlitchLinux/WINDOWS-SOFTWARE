@@ -1030,7 +1030,23 @@ function Download-Software {
         Write-Host "`nInitiating download for $fileName..."
         Write-Host "Source URL: $url"
         
-        # Try multiple URL patterns until one works
+        # Check if this is a GitHub raw URL
+        if ($url -match 'github\.com.*/raw/') {
+            Write-Host "Detected GitHub raw URL - using direct download method" -ForegroundColor Cyan
+            try {
+                # GitHub raw files work best with Invoke-WebRequest
+                $ProgressPreference = 'SilentlyContinue'
+                Invoke-WebRequest -Uri $url -OutFile $destinationFile -UserAgent "Wget" -ErrorAction Stop
+                return $destinationFile
+            } catch {
+                Write-Host "GitHub download failed: $_" -ForegroundColor Red
+                throw "GitHub download failed"
+            } finally {
+                $ProgressPreference = 'Continue'
+            }
+        }
+        
+        # Try multiple URL patterns until one works (for PortableApps)
         $downloadUrls = @(
             # Pattern 1: Standard PortableApps CDN
             "https://download2.portableapps.com/portableapps/$($fileName -replace '_.*','')/$fileName",
@@ -1074,7 +1090,8 @@ function Download-Software {
             
             # Check if we got a real file
             if ($response.Headers['Content-Type'] -like 'application/*' -or 
-                $response.Headers['Content-Type'] -like 'binary/*') {
+                $response.Headers['Content-Type'] -like 'binary/*' -or
+                $response.Headers['Content-Type'] -like 'octet-stream*') {
                 [System.IO.File]::WriteAllBytes($destinationFile, $response.Content)
                 return $destinationFile
             } else {
@@ -1082,10 +1099,11 @@ function Download-Software {
             }
         } catch {
             Write-Host "Browser emulation failed: $_" -ForegroundColor Red
-            throw "All download methods failed"
-        } finally {
-            $ProgressPreference = 'Continue'
+            } finally {
+                $ProgressPreference = 'Continue'
         }
+        
+        throw "All download methods failed"
         
     } catch {
         Write-Host "`nERROR: $_" -ForegroundColor Red
@@ -1095,6 +1113,7 @@ function Download-Software {
         return $null
     }
 }
+
 function Process-DownloadedFile {
     param (
         [string]$filePath
