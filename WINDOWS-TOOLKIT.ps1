@@ -377,7 +377,7 @@ $categories = @{
             @{Name="xmrig-6.19.2-gcc-win64.zip"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT5/xmrig-6.19.2-gcc-win64.zip"}
         )
     }
-﻿    "6" = @{ 
+    "6" = @{ 
         Name = "PT6"; 
         Description = "Accessibility";
         Files = @(
@@ -416,7 +416,7 @@ $categories = @{
     }
     "8" = @{ 
         Name = "PT8"; 
-        Decription = "Education";
+        Description = "Education";
         Files = @(
             @{Name="QEyePortable_6.5.0.9_English.paf.exe"; Url="https://portableapps.com/redir2/?a=QEyePortable&s=s&p=https://www.etl-tools.com/dmdocuments/&d=pb&f=QEyePortable_6.5.0.9_English.paf.exe"},
             @{Name="ArthaPortable_1.0.3_English.paf.exe"; Url="https://portableapps.com/downloading/?a=ArthaPortable&s=s&p=&d=pa&n=Artha Portable&f=ArthaPortable_1.0.3_English.paf.exe"},
@@ -628,7 +628,7 @@ $categories = @{
             @{Name="TelegramDesktopPortable_5.14.3.paf.exe"; Url="https://portableapps.com/downloading/?a=TelegramDesktopPortable&s=s&p=&d=pa&n=Telegram Desktop Portable&f=TelegramDesktopPortable_5.14.3.paf.exe"},
             @{Name="TransmissionPortable_4.0.6.paf.exe"; Url="https://portableapps.com/downloading/?a=TransmissionPortable&s=s&p=&d=pa&n=Transmission Portable&f=TransmissionPortable_4.0.6.paf.exe"},
             @{Name="uGetPortable_2.2.3-2.2.paf.exe"; Url="https://portableapps.com/downloading/?a=uGetPortable&s=s&p=&d=pa&n=uGet Portable&f=uGetPortable_2.2.3-2.2.paf.exe"},
-            @{Name="uTorrentPortable_3.6.0.46896_online.paf.exe"; Url="https://portableapps.com/downloading/?a=uTorrentPortable&s=s&p=&d=pa&n=ÂµTorrent Portable&f=uTorrentPortable_3.6.0.46896_online.paf.exe"},
+            @{Name="uTorrentPortable_3.6.0.46896_online.paf.exe"; Url="https://portableapps.com/downloading/?a=uTorrentPortable&s=s&p=&d=pa&n=Ã‚ÂµTorrent Portable&f=uTorrentPortable_3.6.0.46896_online.paf.exe"},
             @{Name="WackGetPortable_1.2.4_Rev_2_English.paf.exe"; Url="https://portableapps.com/downloading/?a=WackGetPortable&s=s&p=&d=pa&n=WackGet Portable&f=WackGetPortable_1.2.4_Rev_2_English.paf.exe"},
             @{Name="WhalebirdPortable_6.2.2.paf.exe"; Url="https://portableapps.com/downloading/?a=WhalebirdPortable&s=s&p=&d=pa&n=Whalebird Portable&f=WhalebirdPortable_6.2.2.paf.exe"},
             @{Name="WinSCPPortable_6.5.1.paf.exe"; Url="https://portableapps.com/downloading/?a=WinSCPPortable&s=s&p=&d=pa&n=WinSCP Portable&f=WinSCPPortable_6.5.1.paf.exe"},
@@ -767,7 +767,7 @@ $categories = @{
             @{Name="VeraCryptPortable_1.26.24.paf.exe"; Url="https://portableapps.com/downloading/?a=VeraCryptPortable&s=s&p=&d=pa&n=VeraCrypt Portable&f=VeraCryptPortable_1.26.24.paf.exe"}
         )
     }
-    "15" = @{ 
+     "15" = @{ 
         Name = "PT15"; 
         Description = "Utilities";
         Files = @(
@@ -942,7 +942,7 @@ $categories = @{
         )
     }
 
-
+}
 function Show-MainMenu {
     Clear-Host
     Write-Host "============================================="
@@ -952,7 +952,7 @@ function Show-MainMenu {
     Write-Host "Download Path: $downloadPath"
     Write-Host "---------------------------------------------"
     Write-Host "Available Categories:"
-    foreach ($key in $categories.Keys | Sort-Object) {
+    foreach ($key in $categories.Keys | Sort-Object { [int]$_ }) {
         Write-Host " $key. $($categories[$key].Name) - $($categories[$key].Description)"
     }
     Write-Host "---------------------------------------------"
@@ -1027,24 +1027,95 @@ function Download-Software {
     $destinationFile = Join-Path -Path $destination -ChildPath $fileName
     
     try {
-        Write-Host "Downloading $fileName..."
+        Write-Host "`nInitiating download for $fileName..."
+        Write-Host "Source URL: $url"
         
-        # Use BITS (Background Intelligent Transfer Service) for more reliable downloads
-        Start-BitsTransfer -Source $url -Destination $destinationFile -DisplayName "Downloading $fileName"
+        # Step 1: Get the initial page to extract the real download URL
+        $ProgressPreference = 'SilentlyContinue'
+        $response = Invoke-WebRequest -Uri $url -UserAgent "Mozilla/5.0" -SessionVariable session
         
-        if (Test-Path -Path $destinationFile) {
-            Write-Host "Download completed: $destinationFile" -ForegroundColor Green
-            return $destinationFile
-        } else {
-            Write-Host "Download failed: $fileName" -ForegroundColor Red
-            return $null
+        # Extract the real download URL from the page (PortableApps.com specific)
+        $downloadUrl = $response.Links | 
+            Where-Object { $_.href -like "*/download/*" } | 
+            Select-Object -ExpandProperty href -First 1
+        
+        if (-not $downloadUrl) {
+            # Alternative pattern if the above doesn't work
+            $downloadUrl = [regex]::Match($response.Content, 'href="(https?://[^"]*download[^"]*)"').Groups[1].Value
         }
+        
+        if (-not $downloadUrl) {
+            throw "Could not extract download URL from the portal page"
+        }
+        
+        Write-Host "Discovered actual download URL: $downloadUrl"
+        
+        # Step 2: Download the actual file with proper waiting
+        $webClient = New-Object System.Net.WebClient
+        $webClient.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
+        
+        # Create event handler for download progress
+        $global:downloadComplete = $false
+        $eventData = @{
+            FileName = $fileName
+            WebClient = $webClient
+        }
+        
+        Register-ObjectEvent -InputObject $webClient -EventName DownloadFileCompleted -Action {
+            $global:downloadComplete = $true
+            Write-Host "`nDownload completed!" -ForegroundColor Green
+        } -MessageData $eventData
+        
+        $webClient.DownloadProgressChanged.Add({
+            param($s, $e)
+            Write-Progress -Activity "Downloading $($event.FileName)" -Status "$($e.ProgressPercentage)%" -PercentComplete $e.ProgressPercentage
+        })
+        
+        Write-Host "Starting download (please wait 5-10 seconds for initiation)..."
+        $webClient.DownloadFileAsync([Uri]$downloadUrl, $destinationFile)
+        
+        # Wait for download to complete (max 5 minutes)
+        $waitTime = 0
+        while (-not $global:downloadComplete -and $waitTime -lt 300) {
+            Start-Sleep -Seconds 1
+            $waitTime++
+        }
+        
+        if (-not $global:downloadComplete) {
+            $webClient.CancelAsync()
+            throw "Download timed out after 5 minutes"
+        }
+        
+        # Verify the download
+        if (-not (Test-Path -Path $destinationFile)) {
+            throw "Downloaded file not found"
+        }
+        
+        $fileSize = (Get-Item $destinationFile).Length
+        if ($fileSize -lt 100KB) {
+            $content = Get-Content $destinationFile -Raw -ErrorAction SilentlyContinue
+            if ($content -match "<html") {
+                Remove-Item $destinationFile -Force
+                throw "Downloaded file is HTML (probably an error page)"
+            }
+        }
+        
+        Write-Host "Successfully downloaded: $destinationFile ($([math]::Round($fileSize/1MB, 2)) MB" -ForegroundColor Green
+        return $destinationFile
+        
     } catch {
-        Write-Host "Error downloading $fileName : $_" -ForegroundColor Red
+        Write-Host "`nERROR: $_" -ForegroundColor Red
+        if (Test-Path $destinationFile) {
+            Remove-Item $destinationFile -Force
+        }
         return $null
+    } finally {
+        $ProgressPreference = 'Continue'
+        if ($webClient -ne $null) {
+            $webClient.Dispose()
+        }
     }
 }
-
 function Process-DownloadedFile {
     param (
         [string]$filePath
@@ -1123,7 +1194,7 @@ while ($running) {
     $choice = Read-Host "Enter your choice"
     
     switch ($choice) {
-        { $_ -in "1","2","3","4","5" } {
+    { $_ -in "1","2","3","4","5","6","7","8","9","10","11","12","13","14","15" } {
             $selectedCategory = $choice
             Show-SoftwareMenu -category $choice
             
@@ -1507,7 +1578,6 @@ function Show-CategorySelection {
         Show-CategorySelection
     }
 }
-
 function Show-FileNumberInput {
     Clear-Host
     Write-Host "============================================="
