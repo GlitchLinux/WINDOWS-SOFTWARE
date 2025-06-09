@@ -12,7 +12,7 @@
 
 # Configuration
 $repoUrl = "https://github.com/GlitchLinux/WINDOWS-SOFTWARE"
-$defaultDownloadPath = "$env:USERPROFILE\Desktop\WINDOWS-SOFTWARE"
+$defaultDownloadPath = "$env:USERPROFILE\Desktop\SOFTWARE"
 $logFile = "$env:TEMP\WinToolkit.log"
 $enableLogging = $true
 
