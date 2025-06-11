@@ -951,7 +951,6 @@ $categories = @{
         Files = @(
             @{Name="FirefoxPortable_139.0.1_English.paf.exe"; Url="https://portableapps.com/downloading/?a=FirefoxPortable&s=s&p=&d=pa&n=Mozilla Firefox, Portable Edition&f=FirefoxPortable_139.0.1_English.paf.exe"},
             @{Name="FirefoxPortableDeveloper_140.0_Beta_1_English.paf.exe"; Url="https://portableapps.com/downloading/?a=FirefoxPortableDeveloper&s=s&p=&d=pa&n=Mozilla Firefox Developer Edition, Portable&f=FirefoxPortableDeveloper_140.0_Beta_1_English.paf.exe"},
-           
         )
     }
 
