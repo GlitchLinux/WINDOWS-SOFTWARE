@@ -22,6 +22,7 @@ $downloadPath = $defaultDownloadPath
 # Create a hashtable to map the folder structure with direct download links
 $categories = @{
     "1" = @{ 
+        Name = "PT1"; 
         Description = "Partition Tools & Utilities";
         Files = @(
             @{Name="7z.dll"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT1/7z.dll"},
@@ -202,9 +203,17 @@ $categories = @{
             @{Name="WinNTSetupx86.7z"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT2/WinNTSetupx86.7z"}
         )
     }
-    "3" = @{ 
+     "3" = @{ 
         Name = "PT3"; 
-        Description = "Executable Tools (32/64-bit)";
+        Description = "Web Browsers";
+        Files = @(
+            @{Name="3DPChip.7z"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT2/3DPChip.7z"},
+            @{Name="WinNTSetupx86.7z"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT2/WinNTSetupx86.7z"}
+        )
+    }
+    "4" = @{ 
+        Name = "PT4"; 
+        Description = "Executable Tools (64-bit)";
         Files = @(
             @{Name="7z2401-x64.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT3/7z2401-x64.exe"},
             @{Name="advancedipscanner.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT3/advancedipscanner.exe"},
@@ -289,8 +298,8 @@ $categories = @{
             @{Name="XTBox.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT3/XTBox.exe"}
         )
     }
-    "4" = @{ 
-        Name = "PT4"; 
+    "5" = @{ 
+        Name = "PT5"; 
         Description = "Installers & Boot Utilities";
         Files = @(
             @{Name="Brave-x64.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/Brave-x64.exe"},
@@ -346,8 +355,8 @@ $categories = @{
             @{Name="YUMI-UEFI-0.0.4.6.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/YUMI-UEFI-0.0.4.6.exe"}
         )
     }
-    "5" = @{ 
-        Name = "PT5"; 
+    "6" = @{ 
+        Name = "PT6"; 
         Description = "Portable Applications & Archives";
         Files = @(
             @{Name="All Video Downloader Portable.rar"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT5/All%20Video%20Downloader%20Portable.rar"},
@@ -380,8 +389,8 @@ $categories = @{
             @{Name="xmrig-6.19.2-gcc-win64.zip"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT5/xmrig-6.19.2-gcc-win64.zip"}
         )
     }
-    "6" = @{ 
-        Name = "PT6"; 
+    "7" = @{ 
+        Name = "PT7"; 
         Description = "Accessibility";
         Files = @(
             @{Name="BalabolkaPortable_2.15.0.897.paf.exe"; Url="https://portableapps.com/downloading/?a=BalabolkaPortable&s=s&p=https://github.com/PortableApps/Downloads/releases/tag/download?&d=pa&n=Balabolka Portable&f=BalabolkaPortable_2.15.0.897.paf.exe"},
@@ -392,8 +401,8 @@ $categories = @{
             @{Name="VirtualMagnifyingGlassPortable_3.6.paf.exe"; Url="https://portableapps.com/downloading/?a=VirtualMagnifyingGlassPortable&s=s&p=&d=pa&n=Virtual Magnifying Glass Portable&f=VirtualMagnifyingGlassPortable_3.6.paf.exe"}
         )
     }
-    "7" = @{ 
-        Name = "PT7"; 
+    "8" = @{ 
+        Name = "PT8"; 
         Description = "Development";
         Files = @(
             @{Name="AkelPadPortable_4.9.9.paf.exe"; Url="https://portableapps.com/downloading/?a=AkelPadPortable&s=s&p=&d=pa&n=AkelPad Portable&f=AkelPadPortable_4.9.9.paf.exe"},
@@ -417,8 +426,8 @@ $categories = @{
             @{Name="KompoZerPortable_0.8_Beta_3_English.paf.exe"; Url="https://portableapps.com/downloading/?a=KompoZerPortable&s=s&p=&d=pa&n=KompoZer Portable&f=KompoZerPortable_0.8_Beta_3_English.paf.exe"}
         )
     }
-    "8" = @{ 
-        Name = "PT8"; 
+    "9" = @{ 
+        Name = "PT9"; 
         Description = "Education";
         Files = @(
             @{Name="QEyePortable_6.5.0.9_English.paf.exe"; Url="https://portableapps.com/redir2/?a=QEyePortable&s=s&p=https://www.etl-tools.com/dmdocuments/&d=pb&f=QEyePortable_6.5.0.9_English.paf.exe"},
@@ -437,8 +446,8 @@ $categories = @{
             @{Name="TypeFasterPortable_0.4.2_Rev_2_English.paf.exe"; Url="https://portableapps.com/downloading/?a=TypeFasterPortable&s=s&p=&d=pa&n=TypeFaster Typing Tutor Portable&f=TypeFasterPortable_0.4.2_Rev_2_English.paf.exe"}
         )
     }
-    "9" = @{ 
-        Name = "PT9"; 
+    "10" = @{ 
+        Name = "PT10"; 
         Description = "Games";
         Files = @(
             @{Name="2048Portable_2.2_English.paf.exe"; Url="https://portableapps.com/downloading/?a=2048Portable&s=s&p=&d=pa&n=2048 Portable&f=2048Portable_2.2_English.paf.exe"},
@@ -515,8 +524,8 @@ $categories = @{
             @{Name="ZazPortable_1.0.0.paf.exe"; Url="https://portableapps.com/downloading/?a=ZazPortable&s=s&p=&d=pa&n=Zaz Portable&f=ZazPortable_1.0.0.paf.exe"}
         )
     }
-    "10" = @{ 
-        Name = "PT10"; 
+    "11" = @{ 
+        Name = "PT11"; 
         Description = "Graphics";
         Files = @(
             @{Name="AndreaMosaicPortable_3.53.paf.exe"; Url="https://portableapps.com/downloading/?a=AndreaMosaicPortable&s=s&p=&d=pa&n=AndreaMosaic Portable&f=AndreaMosaicPortable_3.53.paf.exe"},
@@ -570,8 +579,8 @@ $categories = @{
             @{Name="DiaPortable_0.97.2_Rev_2.paf.exe"; Url="https://portableapps.com/downloading/?a=DiaPortable&s=s&p=&d=pa&n=Dia Portable&f=DiaPortable_0.97.2_Rev_2.paf.exe"}
         )
     }
-    "11" = @{ 
-        Name = "PT11"; 
+    "12" = @{ 
+        Name = "PT12"; 
         Description = "Internet Apps";
         Files = @(
             @{Name="aMSNPortable_0.98.9.paf.exe"; Url="https://portableapps.com/downloading/?a=aMSNPortable&s=s&p=&d=pa&n=aMSN Portable (Discontinued)&f=aMSNPortable_0.98.9.paf.exe"},
@@ -641,8 +650,8 @@ $categories = @{
             @{Name="ThunderbirdPortable_139.0.1_English.paf.exe"; Url="https://portableapps.com/downloading/?a=ThunderbirdPortable&s=s&p=&d=pa&n=Thunderbird, Portable Edition&f=ThunderbirdPortable_139.0.1_English.paf.exe"}
         )
     }
-    "12" = @{ 
-        Name = "PT12"; 
+    "13" = @{ 
+        Name = "PT13"; 
         Description = "Music & Video";
         Files = @(
             @{Name="AIMPPortable_5.40.2675.paf.exe"; Url="https://portableapps.com/downloading/?a=AIMPPortable&s=s&p=&d=pa&n=AIMP Portable&f=AIMPPortable_5.40.2675.paf.exe"},
@@ -690,8 +699,8 @@ $categories = @{
             @{Name="XMPlayPortable_4.0.paf.exe"; Url="https://portableapps.com/downloading/?a=XMPlayPortable&s=s&p=&d=pa&n=XMPlay Portable&f=XMPlayPortable_4.0.paf.exe"}
         )
     }
-    "13" = @{ 
-        Name = "PT13"; 
+    "14" = @{ 
+        Name = "PT14"; 
         Description = "Office";
         Files = @(
             @{Name="ANotePortable_4.2.4.paf.exe"; Url="https://portableapps.com/downloading/?a=ANotePortable&s=s&p=&d=pa&n=A Note Portable&f=ANotePortable_4.2.4.paf.exe"},
@@ -745,8 +754,8 @@ $categories = @{
             @{Name="ZoteroPortable_7.0.15.paf.exe"; Url="https://portableapps.com/downloading/?a=ZoteroPortable&s=s&p=&d=pa&n=Zotero Portable&f=ZoteroPortable_7.0.15.paf.exe"}
         )
     }
-    "14" = @{ 
-        Name = "PT14"; 
+    "15" = @{ 
+        Name = "PT15"; 
         Description = "Security";
         Files = @(
             @{Name="ClamWinPortable_0.103.2.1_Rev_0.103.12_English.paf.exe"; Url="https://portableapps.com/downloading/?a=ClamWinPortable&s=s&p=&d=pa&n=ClamWin Portable&f=ClamWinPortable_0.103.2.1_Rev_0.103.12_English.paf.exe"},
@@ -770,8 +779,8 @@ $categories = @{
             @{Name="VeraCryptPortable_1.26.24.paf.exe"; Url="https://portableapps.com/downloading/?a=VeraCryptPortable&s=s&p=&d=pa&n=VeraCrypt Portable&f=VeraCryptPortable_1.26.24.paf.exe"}
         )
     }
-    "15" = @{ 
-        Name = "PT15"; 
+    "16" = @{ 
+        Name = "PT16"; 
         Description = "Utilities";
         Files = @(
             @{Name="PortableApps.comInstaller_3.9.1.paf.exe"; Url="https://portableapps.com/downloading/?a=PortableApps.comInstaller&s=s&p=&d=pa&n=PortableApps.com Installer&f=PortableApps.comInstaller_3.9.1.paf.exe"},
