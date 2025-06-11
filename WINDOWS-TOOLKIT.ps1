@@ -1057,7 +1057,7 @@ function Download-Software {
     $destinationFile = Join-Path -Path $destination -ChildPath $fileName
     
     try {
-        Write-Host "`nInitiating download for $fileName..." -ForegroundColor Cyan
+        Write-Host "`nInitiating download for $fileName..."
         Write-Host "Source URL: $url"
         
         # Check if this is a GitHub raw URL
@@ -1065,50 +1065,14 @@ function Download-Software {
             Write-Host "Detected GitHub raw URL - using direct download method" -ForegroundColor Cyan
             try {
                 # GitHub raw files work best with Invoke-WebRequest
-                Write-Host "Starting GitHub download with progress..." -ForegroundColor Cyan
                 $ProgressPreference = 'SilentlyContinue'
-                
-                # Create WebClient for progress display
-                $webClient = New-Object System.Net.WebClient
-                $global:githubDownloadComplete = $false
-                
-                $webClient.DownloadProgressChanged += {
-                    param($sender, $e)
-                    $Progress = $e.ProgressPercentage
-                    $BytesReceived = $e.BytesReceived
-                    $TotalBytes = $e.TotalBytesToReceive
-                    $Speed = ($BytesReceived / 1024 / ($e.TimeSpan.TotalSeconds + 1)).ToString("0.00")
-                    Write-Progress -Activity "Downloading from GitHub" -Status "$Progress% Complete ($([Math]::Round($BytesReceived/1MB,2)) MB of $([Math]::Round($TotalBytes/1MB,2)) MB) at $Speed KB/s" -PercentComplete $Progress
-                }
-                
-                $webClient.DownloadFileCompleted += {
-                    param($sender, $e)
-                    $global:githubDownloadComplete = $true
-                    if ($e.Error) {
-                        Write-Host "GitHub download failed: $($e.Error.Message)" -ForegroundColor Red
-                    }
-                }
-                
-                # Start async download
-                $webClient.DownloadFileAsync([uri]$url, $destinationFile)
-                
-                # Wait for download to complete
-                while (-not $global:githubDownloadComplete) {
-                    Start-Sleep -Milliseconds 500
-                }
-                
-                if (Test-Path $destinationFile) {
-                    Write-Host "GitHub download completed successfully" -ForegroundColor Green
-                    return $destinationFile
-                } else {
-                    throw "Download failed - file not created"
-                }
+                Invoke-WebRequest -Uri $url -OutFile $destinationFile -UserAgent "Wget" -ErrorAction Stop
+                return $destinationFile
             } catch {
                 Write-Host "GitHub download failed: $_" -ForegroundColor Red
                 throw "GitHub download failed"
             } finally {
                 $ProgressPreference = 'Continue'
-                if ($webClient) { $webClient.Dispose() }
             }
         }
         
@@ -1135,19 +1099,8 @@ function Download-Software {
                 Write-Host "Trying URL: $downloadUrl"
                 
                 try {
-                    # Try with BITS first with progress
-                    Write-Host "Attempting BITS transfer..." -ForegroundColor Cyan
-                    $BitsJob = Start-BitsTransfer -Source $downloadUrl -Destination $destinationFile -Asynchronous -ErrorAction Stop -Priority High
-                    
-                    # Display BITS transfer progress
-                    while ($BitsJob.JobState -eq "Transferring") {
-                        $Progress = [Math]::Round(($BitsJob.BytesTransferred * 100 / $BitsJob.BytesTotal), 2)
-                        Write-Progress -Activity "Downloading PortableApp via BITS" -Status "$Progress% Complete" -PercentComplete $Progress
-                        Start-Sleep -Milliseconds 500
-                    }
-                    
-                    Complete-BitsTransfer -BitsJob $BitsJob
-                    Write-Progress -Activity "Downloading PortableApp via BITS" -Completed
+                    # Try with BITS first
+                    Start-BitsTransfer -Source $downloadUrl -Destination $destinationFile -ErrorAction Stop -Priority High
                     
                     # Verify download
                     if (Test-Path $destinationFile -PathType Leaf) {
@@ -1159,7 +1112,7 @@ function Download-Software {
                         Remove-Item $destinationFile -Force
                     }
                 } catch {
-                    Write-Host "BITS attempt failed: $($_.Exception.Message)" -ForegroundColor Yellow
+                    Write-Host "Attempt failed: $($_.Exception.Message)" -ForegroundColor Yellow
                 }
             }
         }
@@ -1167,76 +1120,43 @@ function Download-Software {
         # Standard download method for non-PortableApps files
         Write-Host "Using standard download method..." -ForegroundColor Cyan
         try {
-            # First try BITS if available with progress
+            $ProgressPreference = 'SilentlyContinue'
+            
+            # First try BITS if available
             try {
-                Write-Host "Attempting BITS transfer with progress..." -ForegroundColor Cyan
-                $BitsJob = Start-BitsTransfer -Source $url -Destination $destinationFile -Asynchronous -ErrorAction Stop -Priority High
-                
-                # Display BITS transfer progress
-                while ($BitsJob.JobState -eq "Transferring") {
-                    $Progress = [Math]::Round(($BitsJob.BytesTransferred * 100 / $BitsJob.BytesTotal), 2)
-                    Write-Progress -Activity "Downloading via BITS" -Status "$Progress% Complete" -PercentComplete $Progress
-                    Start-Sleep -Milliseconds 500
-                }
-                
-                Complete-BitsTransfer -BitsJob $BitsJob
-                Write-Progress -Activity "Downloading via BITS" -Completed
-                Write-Host "BITS transfer completed successfully" -ForegroundColor Green
+                Start-BitsTransfer -Source $url -Destination $destinationFile -ErrorAction Stop -Priority High
                 return $destinationFile
             } catch {
                 Write-Host "BITS transfer failed, falling back to web request: $_" -ForegroundColor Yellow
             }
             
-            # Fallback to WebClient with progress
+            # Fall back to Invoke-WebRequest
+            $client = New-Object System.Net.WebClient
+            $client.DownloadFile($url, $destinationFile)
+            return $destinationFile
+        } catch {
+            Write-Host "Standard download failed: $_" -ForegroundColor Red
+            
+            # Final fallback with browser emulation
+            Write-Host "Attempting browser-emulated download..."
             try {
-                Write-Host "Starting web request download with progress..." -ForegroundColor Cyan
-                $webClient = New-Object System.Net.WebClient
+                $response = Invoke-WebRequest -Uri $url -UserAgent "Mozilla/5.0" -MaximumRedirection 10 -TimeoutSec 60 -ErrorAction Stop
                 
-                # Register event for progress tracking
-                $global:downloadComplete = $false
-                $eventData = @{
-                    Url = $url
-                    Destination = $destinationFile
-                }
-                
-                $webClient.DownloadProgressChanged += {
-                    param($sender, $e)
-                    $Progress = $e.ProgressPercentage
-                    $BytesReceived = $e.BytesReceived
-                    $TotalBytes = $e.TotalBytesToReceive
-                    $Speed = ($BytesReceived / 1024 / ($e.TimeSpan.TotalSeconds + 1)).ToString("0.00")
-                    Write-Progress -Activity "Downloading $($eventData.Url)" -Status "$Progress% Complete ($([Math]::Round($BytesReceived/1MB,2)) MB of $([Math]::Round($TotalBytes/1MB,2)) MB) at $Speed KB/s" -PercentComplete $Progress
-                }
-                
-                $webClient.DownloadFileCompleted += {
-                    param($sender, $e)
-                    $global:downloadComplete = $true
-                    if ($e.Error) {
-                        Write-Host "Download failed: $($e.Error.Message)" -ForegroundColor Red
-                    }
-                }
-                
-                # Start async download
-                $webClient.DownloadFileAsync([uri]$url, $destinationFile)
-                
-                # Wait for download to complete
-                while (-not $global:downloadComplete) {
-                    Start-Sleep -Milliseconds 500
-                }
-                
-                if (Test-Path $destinationFile) {
-                    Write-Host "Web request download completed successfully" -ForegroundColor Green
+                # Check if we got a real file
+                if ($response.Headers['Content-Type'] -like 'application/*' -or 
+                    $response.Headers['Content-Type'] -like 'binary/*' -or
+                    $response.Headers['Content-Type'] -like 'octet-stream*') {
+                    [System.IO.File]::WriteAllBytes($destinationFile, $response.Content)
                     return $destinationFile
                 } else {
-                    throw "Download failed - file not created"
+                    throw "Server returned non-file content"
                 }
             } catch {
-                Write-Host "Web request download failed: $_" -ForegroundColor Red
-                throw
+                Write-Host "Browser emulation failed: $_" -ForegroundColor Red
+                throw "All download methods failed"
             }
         } finally {
             $ProgressPreference = 'Continue'
-            if ($webClient) { $webClient.Dispose() }
         }
         
     } catch {
