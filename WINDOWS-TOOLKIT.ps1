@@ -5,8 +5,8 @@
     This script allows users to browse and download software from the GlitchLinux/WINDOWS-SOFTWARE GitHub repository
     using direct download links for individual files.
 .NOTES
-    File Name      : WindowsSoftwareDownloader.ps1
-    Author         : Your Name
+    File Name      : WINDOWS-TOOLKIT.ps1
+    Author         : GlitchLinux
     Prerequisite   : PowerShell 5.1 or later
 #>
 
