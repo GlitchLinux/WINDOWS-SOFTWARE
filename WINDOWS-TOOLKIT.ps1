@@ -12,7 +12,7 @@
 
 # Configuration
 $repoUrl = "https://github.com/GlitchLinux/WINDOWS-SOFTWARE"
-$defaultDownloadPath = "$env:USERPROFILE\Desktop\WINDOWS-SOFTWARE"
+$defaultDownloadPath = "$env:USERPROFILE\Desktop\WIN-Toolkit"
 
 # Initialize variables
 $softwareList = @()
@@ -950,7 +950,7 @@ $categories = @{
 function Show-MainMenu {
     Clear-Host
     Write-Host "============================================="
-    Write-Host "    WINDOWS SOFTWARE DOWNLOADER UTILITY      "
+    Write-Host "     WIN-Toolkit - Software CLI Utilty       "
     Write-Host "============================================="
     Write-Host "Repository: $repoUrl"
     Write-Host "Download Path: $downloadPath"
