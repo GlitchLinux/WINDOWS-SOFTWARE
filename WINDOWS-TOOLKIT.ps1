@@ -207,8 +207,25 @@ $categories = @{
         Name = "PT3"; 
         Description = "Web Browsers";
         Files = @(
-            @{Name="3DPChip.7z"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT2/3DPChip.7z"},
-            @{Name="WinNTSetupx86.7z"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT2/WinNTSetupx86.7z"}
+            @{Name="FalkonPortable_3.1.0_Rev_2.paf.exe"; Url="https://portableapps.com/downloading/?a=FalkonPortable&s=s&p=&d=pa&n=Falkon Portable (Discontinued)&f=FalkonPortable_3.1.0_Rev_2.paf.exe"},
+            @{Name="GoogleChromePortable_137.0.7151.69_online.paf.exe"; Url="https://portableapps.com/downloading/?a=GoogleChromePortable&s=s&p=&d=pa&n=Google Chrome Portable&f=GoogleChromePortable_137.0.7151.69_online.paf.exe"},
+            @{Name="IronPortable_135.0.6850.0.paf.exe"; Url="https://portableapps.com/downloading/?a=IronPortable&s=s&p=&d=pa&n=Iron Portable&f=IronPortable_135.0.6850.0.paf.exe"},
+            @{Name="K-MeleonPortable_76.5.5-2024-12-21.paf.exe"; Url="https://portableapps.com/downloading/?a=K-MeleonPortable&s=s&p=&d=pa&n=K-Meleon Portable&f=K-MeleonPortable_76.5.5-2024-12-21.paf.exe"},
+            @{Name="LibreWolfPortable_139.0.1-1_English.paf.exe"; Url="https://portableapps.com/downloading/?a=LibreWolfPortable&s=s&p=&d=pa&n=LibreWolf Portable&f=LibreWolfPortable_139.0.1-1_English.paf.exe"},
+            @{Name="MaxthonPortable_7.3.1.4201.paf.exe"; Url="https://portableapps.com/downloading/?a=MaxthonPortable&s=s&p=&d=pa&n=Maxthon Portable&f=MaxthonPortable_7.3.1.4201.paf.exe"},
+            @{Name="FirefoxPortable_139.0.1_English.paf.exe"; Url="https://portableapps.com/downloading/?a=FirefoxPortable&s=s&p=&d=pa&n=Mozilla Firefox, Portable Edition&f=FirefoxPortable_139.0.1_English.paf.exe"},
+            @{Name="FirefoxPortableDeveloper_140.0_Beta_1_English.paf.exe"; Url="https://portableapps.com/downloading/?a=FirefoxPortableDeveloper&s=s&p=&d=pa&n=Mozilla Firefox Developer Edition, Portable&f=FirefoxPortableDeveloper_140.0_Beta_1_English.paf.exe"},
+            @{Name="OperaPortable_119.0.5497.56.paf.exe"; Url="https://portableapps.com/downloading/?a=OperaPortable&s=s&p=&d=pa&n=Opera Portable, Portable Edition&f=OperaPortable_119.0.5497.56.paf.exe"},
+            @{Name="OperaGXPortable_119.0.5497.43.paf.exe"; Url="https://portableapps.com/downloading/?a=OperaGXPortable&s=s&p=&d=pa&n=Opera GX Portable, Portable Edition&f=OperaGXPortable_119.0.5497.43.paf.exe"},
+            @{Name="OperaMailPortable_1.0.1044.paf.exe"; Url="https://portableapps.com/downloading/?a=OperaMailPortable&s=s&p=&d=pa&n=Opera Mail Portable (Discontinued)&f=OperaMailPortable_1.0.1044.paf.exe"},
+            @{Name="QupZillaPortable_2.2.6.paf.exe"; Url="https://portableapps.com/downloading/?a=QupZillaPortable&s=s&p=&d=pa&n=QupZilla Portable (Discontinued)&f=QupZillaPortable_2.2.6.paf.exe"},
+            @{Name="SeaMonkeyPortable_2.53.20_English.paf.exe"; Url="https://portableapps.com/downloading/?a=SeaMonkeyPortable&s=s&p=&d=pa&n=SeaMonkey Portable&f=SeaMonkeyPortable_2.53.20_English.paf.exe"},
+            @{Name="SupermiumPortable_132.0.6834.222_R3.01.paf.exe"; Url="https://portableapps.com/downloading/?a=SupermiumPortable&s=s&p=&d=pa&n=Supermium Portable&f=SupermiumPortable_132.0.6834.222_R3.01.paf.exe"},
+            @{Name="thorium_AVX2_mini_installer.exe"; Url="https://github.com/Alex313031/Thorium-Win/releases/download/M130.0.6723.174/thorium_AVX2_mini_installer.exe"},
+            @{Name="thorium_Th24_BETA2_mini_installer.exe"; Url="https://github.com/Alex313031/Thorium-Win/releases/download/M126.0.6478.251-1/thorium_Th24_BETA2_mini_installer.exe"},
+            @{Name="thorium_Th24_BETA2_126.0.6478.251.zip"; Url="https://github.com/Alex313031/Thorium-Win/releases/download/M126.0.6478.251-1/thorium_Th24_BETA2_126.0.6478.251.zip"},
+            @{Name="tor-browser-windows-x86_64-portable-14.5.3.exe"; Url="https://archive.torproject.org/tor-package-archive/torbrowser/14.5.3/tor-browser-windows-x86_64-portable-14.5.3.exe"},
+            @{Name="BraveBrowserSetup.exe"; Url="https://github.com/brave/brave-browser/releases/download/v1.79.123/BraveBrowserSetup.exe"}
         )
     }
     "4" = @{ 
