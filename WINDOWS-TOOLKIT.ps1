@@ -771,7 +771,7 @@ $categories = @{
             @{Name="VeraCryptPortable_1.26.24.paf.exe"; Url="https://portableapps.com/downloading/?a=VeraCryptPortable&s=s&p=&d=pa&n=VeraCrypt Portable&f=VeraCryptPortable_1.26.24.paf.exe"}
         )
     }
-     "15" = @{ 
+    "15" = @{ 
         Name = "PT15"; 
         Description = "Utilities";
         Files = @(
@@ -943,14 +943,6 @@ $categories = @{
             @{Name="PortableApps.comLauncher_2.2.9.paf.exe"; Url="https://portableapps.com/downloading/?a=PortableApps.comLauncher&s=s&p=&d=pa&n=PortableApps.com Launcher&f=PortableApps.comLauncher_2.2.9.paf.exe"},
             @{Name="PortableApps.comInstaller_3.9.1.paf.exe"; Url="https://portableapps.com/downloading/?a=PortableApps.comInstaller&s=s&p=&d=pa&n=PortableApps.com Installer&f=PortableApps.comInstaller_3.9.1.paf.exe"},
             @{Name="PortableApps.comAppCompactor_3.9_English.paf.exe"; Url="https://portableapps.com/downloading/?a=PortableApps.comAppCompactor&s=s&p=&d=pa&n=PortableApps.com AppCompactor&f=PortableApps.comAppCompactor_3.9_English.paf.exe"}
-        )
-    }
-    "16" = @{ 
-        Name = "PT16"; 
-        Description = "Web Browsers";
-        Files = @(
-            @{Name="FirefoxPortable_139.0.1_English.paf.exe"; Url="https://portableapps.com/downloading/?a=FirefoxPortable&s=s&p=&d=pa&n=Mozilla Firefox, Portable Edition&f=FirefoxPortable_139.0.1_English.paf.exe"},
-            @{Name="FirefoxPortableDeveloper_140.0_Beta_1_English.paf.exe"; Url="https://portableapps.com/downloading/?a=FirefoxPortableDeveloper&s=s&p=&d=pa&n=Mozilla Firefox Developer Edition, Portable&f=FirefoxPortableDeveloper_140.0_Beta_1_English.paf.exe"}
         )
     }
 
