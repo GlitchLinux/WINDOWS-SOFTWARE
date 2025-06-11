@@ -1050,64 +1050,88 @@ function Download-Software {
             }
         }
         
-        # Try multiple URL patterns until one works (for PortableApps)
-        $downloadUrls = @(
-            # Pattern 1: Standard PortableApps CDN
-            "https://download2.portableapps.com/portableapps/$($fileName -replace '_.*','')/$fileName",
+        # Only use PortableApps-specific logic for .paf.exe files
+        if ($fileName -match '\.paf\.exe$') {
+            Write-Host "Detected PortableApps package (.paf.exe) - using PortableApps download methods" -ForegroundColor Cyan
             
-            # Pattern 2: Online installer pattern
-            "https://download2.portableapps.com/portableapps/$($fileName -replace '(_online)?\.paf\.exe$','')/$fileName",
-            
-            # Pattern 3: App name without version
-            "https://download2.portableapps.com/portableapps/$($fileName -split '_')[0]/$fileName",
-            
-            # Original URL as last resort
-            $url
-        )
-
-        foreach ($downloadUrl in $downloadUrls) {
-            Write-Host "Trying URL: $downloadUrl"
-            
-            try {
-                # Try with BITS first
-                Start-BitsTransfer -Source $downloadUrl -Destination $destinationFile -ErrorAction Stop -Priority High
+            # Try multiple URL patterns until one works (for PortableApps)
+            $downloadUrls = @(
+                # Pattern 1: Standard PortableApps CDN
+                "https://download2.portableapps.com/portableapps/$($fileName -replace '_.*','')/$fileName",
                 
-                # Verify download
-                if (Test-Path $destinationFile -PathType Leaf) {
-                    $fileSize = (Get-Item $destinationFile).Length
-                    if ($fileSize -gt 100KB) {
-                        Write-Host "Successfully downloaded via $([System.IO.Path]::GetFileName($downloadUrl))" -ForegroundColor Green
-                        return $destinationFile
-                    }
-                    Remove-Item $destinationFile -Force
-                }
-            } catch {
-                Write-Host "Attempt failed: $($_.Exception.Message)" -ForegroundColor Yellow
-            }
-        }
+                # Pattern 2: Online installer pattern
+                "https://download2.portableapps.com/portableapps/$($fileName -replace '(_online)?\.paf\.exe$','')/$fileName",
+                
+                # Pattern 3: App name without version
+                "https://download2.portableapps.com/portableapps/$($fileName -split '_')[0]/$fileName",
+                
+                # Original URL as last resort
+                $url
+            )
 
-        # If all patterns failed, try with browser emulation
-        Write-Host "Attempting browser-emulated download..."
-        try {
-            $ProgressPreference = 'SilentlyContinue'
-            $response = Invoke-WebRequest -Uri $url -UserAgent "Mozilla/5.0" -MaximumRedirection 10 -TimeoutSec 60 -ErrorAction Stop
-            
-            # Check if we got a real file
-            if ($response.Headers['Content-Type'] -like 'application/*' -or 
-                $response.Headers['Content-Type'] -like 'binary/*' -or
-                $response.Headers['Content-Type'] -like 'octet-stream*') {
-                [System.IO.File]::WriteAllBytes($destinationFile, $response.Content)
-                return $destinationFile
-            } else {
-                throw "Server returned non-file content"
+            foreach ($downloadUrl in $downloadUrls) {
+                Write-Host "Trying URL: $downloadUrl"
+                
+                try {
+                    # Try with BITS first
+                    Start-BitsTransfer -Source $downloadUrl -Destination $destinationFile -ErrorAction Stop -Priority High
+                    
+                    # Verify download
+                    if (Test-Path $destinationFile -PathType Leaf) {
+                        $fileSize = (Get-Item $destinationFile).Length
+                        if ($fileSize -gt 100KB) {
+                            Write-Host "Successfully downloaded via $([System.IO.Path]::GetFileName($downloadUrl))" -ForegroundColor Green
+                            return $destinationFile
+                        }
+                        Remove-Item $destinationFile -Force
+                    }
+                } catch {
+                    Write-Host "Attempt failed: $($_.Exception.Message)" -ForegroundColor Yellow
+                }
             }
-        } catch {
-            Write-Host "Browser emulation failed: $_" -ForegroundColor Red
-            } finally {
-                $ProgressPreference = 'Continue'
         }
         
-        throw "All download methods failed"
+        # Standard download method for non-PortableApps files
+        Write-Host "Using standard download method..." -ForegroundColor Cyan
+        try {
+            $ProgressPreference = 'SilentlyContinue'
+            
+            # First try BITS if available
+            try {
+                Start-BitsTransfer -Source $url -Destination $destinationFile -ErrorAction Stop -Priority High
+                return $destinationFile
+            } catch {
+                Write-Host "BITS transfer failed, falling back to web request: $_" -ForegroundColor Yellow
+            }
+            
+            # Fall back to Invoke-WebRequest
+            $client = New-Object System.Net.WebClient
+            $client.DownloadFile($url, $destinationFile)
+            return $destinationFile
+        } catch {
+            Write-Host "Standard download failed: $_" -ForegroundColor Red
+            
+            # Final fallback with browser emulation
+            Write-Host "Attempting browser-emulated download..."
+            try {
+                $response = Invoke-WebRequest -Uri $url -UserAgent "Mozilla/5.0" -MaximumRedirection 10 -TimeoutSec 60 -ErrorAction Stop
+                
+                # Check if we got a real file
+                if ($response.Headers['Content-Type'] -like 'application/*' -or 
+                    $response.Headers['Content-Type'] -like 'binary/*' -or
+                    $response.Headers['Content-Type'] -like 'octet-stream*') {
+                    [System.IO.File]::WriteAllBytes($destinationFile, $response.Content)
+                    return $destinationFile
+                } else {
+                    throw "Server returned non-file content"
+                }
+            } catch {
+                Write-Host "Browser emulation failed: $_" -ForegroundColor Red
+                throw "All download methods failed"
+            }
+        } finally {
+            $ProgressPreference = 'Continue'
+        }
         
     } catch {
         Write-Host "`nERROR: $_" -ForegroundColor Red
@@ -1117,11 +1141,6 @@ function Download-Software {
         return $null
     }
 }
-
-function Process-DownloadedFile {
-    param (
-        [string]$filePath
-    )
     
     $fileExtension = [System.IO.Path]::GetExtension($filePath).ToLower()
     
