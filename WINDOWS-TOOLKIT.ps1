@@ -1142,6 +1142,39 @@ function Download-Software {
     }
 }
 
+function Process-DownloadedFile {
+    param (
+        [string]$filePath
+    )
+    
+    $fileExtension = [System.IO.Path]::GetExtension($filePath).ToLower()
+    
+    switch ($fileExtension) {
+        ".exe" {
+            Write-Host "This is an executable file."
+            $run = Read-Host "Do you want to run it now? (y/n)"
+            if ($run -eq "y") {
+                try {
+                    Start-Process -FilePath $filePath
+                    Write-Host "Executable launched." -ForegroundColor Green
+                } catch {
+                    Write-Host "Error running executable: $_" -ForegroundColor Red
+                }
+            }
+        }
+        {$_ -in ".zip",".7z",".rar"} {
+            Write-Host "This is an archive file."
+            $extract = Read-Host "Do you want to extract it now? (y/n)"
+            if ($extract -eq "y") {
+                Extract-Archive -filePath $filePath
+            }
+        }
+        default {
+            Write-Host "File downloaded: $filePath"
+        }
+    }
+}
+
 function Extract-Archive {
     param (
         [string]$filePath
