@@ -10,10 +10,10 @@ title Windows Software Downloader Utility Installer
 NET SESSION >nul 2>&1
 IF %ERRORLEVEL% NEQ 0 (
     echo.
-    echo ########################################################
-    echo # This script requires administrator privileges!       #
-    echo # Right-click and select "Run as administrator"        #
-    echo ########################################################
+    echo ##################################################
+    echo # This script requires administrator privileges! #
+    echo # Right-click and select: "Run as administrator" #
+    echo ##################################################
     echo.
     pause
     exit /b 1
@@ -28,10 +28,9 @@ set "TEMP_DIR=%TEMP%\WINDOWS-SOFTWARE-INSTALLER"
 if not exist "%TEMP_DIR%" mkdir "%TEMP_DIR%"
 
 :: Main function
-echo ########################################################
-echo #        Windows Software Downloader Utility          #
-echo #             Automated Installer                    #
-echo ########################################################
+echo ##########################################
+echo #   WIN-Toolkit - CLI Software Utility   #
+echo ##########################################
 echo.
 
 :: Download the main PowerShell script
@@ -45,9 +44,9 @@ if not exist "%TEMP_DIR%\%PS_SCRIPT_NAME%" (
 
 :: Execute the script
 echo.
-echo ########################################################
-echo #       Launching Windows Software Downloader         #
-echo ########################################################
+echo #########################################
+echo #  Launching WIN-Toolkit in Powershell  #
+echo #########################################
 echo.
 powershell -NoProfile -ExecutionPolicy Bypass -File "%TEMP_DIR%\%PS_SCRIPT_NAME%"
 
