@@ -316,6 +316,8 @@ $categories = @{
             @{Name="Qsib.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/Qsib.exe"},
             @{Name="TreeSizeFreeSetup.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/TreeSizeFreeSetup.exe"},
             @{Name="TreeSizeFree-Portable.zip"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/TreeSizeFree-Portable.zip"},
+            @{Name="thorium_Th24_BETA2_mini_installer.exe"; Url="https://github.com/Alex313031/Thorium-Win/releases/download/M126.0.6478.251-1/thorium_Th24_BETA2_mini_installer.exe"},
+            @{Name="Thorium_AVX2_130.0.6723.174.zip"; Url="https://github.com/Alex313031/Thorium-Win/releases/download/M130.0.6723.174/Thorium_AVX2_130.0.6723.174.zip"},
             @{Name="RevoUninstaller.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/RevoUninstaller.exe"},
             @{Name="rmprepusb-2-1-746.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/rmprepusb-2-1-746.exe"},
             @{Name="rufus-3.20.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/rufus-3.20.exe"},
