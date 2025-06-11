@@ -573,7 +573,7 @@ $categories = @{
     }
     "11" = @{ 
         Name = "PT11"; 
-        Description = "Internet";
+        Description = "Internet Apps";
         Files = @(
             @{Name="aMSNPortable_0.98.9.paf.exe"; Url="https://portableapps.com/downloading/?a=aMSNPortable&s=s&p=&d=pa&n=aMSN Portable (Discontinued)&f=aMSNPortable_0.98.9.paf.exe"},
             @{Name="DamnVidPortable_1.6.0.1.paf.exe"; Url="https://portableapps.com/downloading/?a=DamnVidPortable&s=s&p=&d=pa&n=DamnVid Portable&f=DamnVidPortable_1.6.0.1.paf.exe"},
@@ -644,7 +644,7 @@ $categories = @{
     }
     "12" = @{ 
         Name = "PT12"; 
-        Description = "MusicVideo";
+        Description = "Music & Video";
         Files = @(
             @{Name="AIMPPortable_5.40.2675.paf.exe"; Url="https://portableapps.com/downloading/?a=AIMPPortable&s=s&p=&d=pa&n=AIMP Portable&f=AIMPPortable_5.40.2675.paf.exe"},
             @{Name="AudaciousPortable_4.4.2.paf.exe"; Url="https://portableapps.com/downloading/?a=AudaciousPortable&s=s&p=&d=pa&n=Audacious Portable&f=AudaciousPortable_4.4.2.paf.exe"},
@@ -943,6 +943,15 @@ $categories = @{
             @{Name="PortableApps.comLauncher_2.2.9.paf.exe"; Url="https://portableapps.com/downloading/?a=PortableApps.comLauncher&s=s&p=&d=pa&n=PortableApps.com Launcher&f=PortableApps.comLauncher_2.2.9.paf.exe"},
             @{Name="PortableApps.comInstaller_3.9.1.paf.exe"; Url="https://portableapps.com/downloading/?a=PortableApps.comInstaller&s=s&p=&d=pa&n=PortableApps.com Installer&f=PortableApps.comInstaller_3.9.1.paf.exe"},
             @{Name="PortableApps.comAppCompactor_3.9_English.paf.exe"; Url="https://portableapps.com/downloading/?a=PortableApps.comAppCompactor&s=s&p=&d=pa&n=PortableApps.com AppCompactor&f=PortableApps.comAppCompactor_3.9_English.paf.exe"}
+        )
+    }
+    "16" = @{ 
+        Name = "PT16"; 
+        Description = "Web Browsers";
+        Files = @(
+            @{Name="FirefoxPortable_139.0.1_English.paf.exe"; Url="https://portableapps.com/downloading/?a=FirefoxPortable&s=s&p=&d=pa&n=Mozilla Firefox, Portable Edition&f=FirefoxPortable_139.0.1_English.paf.exe"},
+            @{Name="FirefoxPortableDeveloper_140.0_Beta_1_English.paf.exe"; Url="https://portableapps.com/downloading/?a=FirefoxPortableDeveloper&s=s&p=&d=pa&n=Mozilla Firefox Developer Edition, Portable&f=FirefoxPortableDeveloper_140.0_Beta_1_English.paf.exe"},
+           
         )
     }
 
