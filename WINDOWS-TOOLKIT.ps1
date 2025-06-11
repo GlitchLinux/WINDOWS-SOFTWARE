@@ -326,6 +326,7 @@ $categories = @{
             @{Name="decrypt_STOPDjvu.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/decrypt_STOPDjvu.exe"},
             @{Name="Defraggler-Setup.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/Defraggler-Setup.exe"},
             @{Name="Iso2Usb.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/Iso2Usb.exe"},
+            @{Name="Easy2Boot_v2.20bBeta.7z"; Url="https://github.com/GlitchLinux/Easy2Boot/raw/refs/heads/main/Easy2Boot_v2.20bBeta.7z"},
             @{Name="KeyLock.Setup-3.0.30010.9.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/KeyLock.Setup-3.0.30010.9.exe"},
             @{Name="live-usb-install-2.5.12.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/live-usb-install-2.5.12.exe"},
             @{Name="MicrosoftEdgeSetup.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/MicrosoftEdgeSetup.exe"},
