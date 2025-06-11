@@ -1140,7 +1140,7 @@ function Download-Software {
                     $BitsJob = Start-BitsTransfer -Source $downloadUrl -Destination $destinationFile -Asynchronous -ErrorAction Stop -Priority High
                     
                     # Display BITS transfer progress
-                    while (($BitsJob.JobState -eq "Transferring") {
+                    while ($BitsJob.JobState -eq "Transferring") {
                         $Progress = [Math]::Round(($BitsJob.BytesTransferred * 100 / $BitsJob.BytesTotal), 2)
                         Write-Progress -Activity "Downloading PortableApp via BITS" -Status "$Progress% Complete" -PercentComplete $Progress
                         Start-Sleep -Milliseconds 500
@@ -1173,7 +1173,7 @@ function Download-Software {
                 $BitsJob = Start-BitsTransfer -Source $url -Destination $destinationFile -Asynchronous -ErrorAction Stop -Priority High
                 
                 # Display BITS transfer progress
-                while (($BitsJob.JobState -eq "Transferring") {
+                while ($BitsJob.JobState -eq "Transferring") {
                     $Progress = [Math]::Round(($BitsJob.BytesTransferred * 100 / $BitsJob.BytesTotal), 2)
                     Write-Progress -Activity "Downloading via BITS" -Status "$Progress% Complete" -PercentComplete $Progress
                     Start-Sleep -Milliseconds 500
