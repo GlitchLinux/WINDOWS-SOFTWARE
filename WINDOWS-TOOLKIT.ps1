@@ -22,7 +22,6 @@ $downloadPath = $defaultDownloadPath
 # Create a hashtable to map the folder structure with direct download links
 $categories = @{
     "1" = @{ 
-        Name = "PT1"; 
         Description = "Partition Tools & Utilities";
         Files = @(
             @{Name="7z.dll"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT1/7z.dll"},
