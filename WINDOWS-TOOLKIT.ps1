@@ -242,6 +242,7 @@ $categories = @{
             @{Name="AutoDisplay.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT3/AutoDisplay.exe"},
             @{Name="blacknotepad.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT3/blacknotepad.exe"},
             @{Name="Brave-x64.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT3/Brave-x64.exe"},
+            @{Name="bat2exe.exe"; Url=" https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT4/bat2exe.exe"},
             @{Name="CentBrowser_x64.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT3/CentBrowser_x64.exe"},
             @{Name="CentBrowser_x86.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT3/CentBrowser_x86.exe"},
             @{Name="chkdsk64.exe"; Url="https://github.com/GlitchLinux/WINDOWS-SOFTWARE/raw/refs/heads/main/PT3/chkdsk64.exe"},
