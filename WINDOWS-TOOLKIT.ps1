@@ -1158,7 +1158,6 @@ function Download-Software {
         } finally {
             $ProgressPreference = 'Continue'
         }
-        
     } catch {
         Write-Host "`nERROR: $_" -ForegroundColor Red
         if (Test-Path $destinationFile) {
