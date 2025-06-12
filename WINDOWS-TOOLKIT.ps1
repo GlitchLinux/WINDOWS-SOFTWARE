@@ -1099,8 +1099,19 @@ function Download-Software {
                 Write-Host "Trying URL: $downloadUrl"
                 
                 try {
-                    # Try with BITS first
-                    Start-BitsTransfer -Source $downloadUrl -Destination $destinationFile -ErrorAction Stop -Priority High
+                    # Try with BITS first (with progress)
+                    $BitsJob = Start-BitsTransfer -Source $downloadUrl -Destination $destinationFile -Asynchronous -Priority High -ErrorAction Stop
+                    
+                    # Show BITS transfer progress
+                    while ($BitsJob.JobState -eq "Transferring" -or $BitsJob.JobState -eq "Connecting") {
+                        if ($BitsJob.BytesTotal -gt 0) {
+                            $progress = [math]::Round(($BitsJob.BytesTransferred * 100) / $BitsJob.BytesTotal, 2)
+                            Write-Progress -Activity "Downloading $fileName" -Status "$progress% Complete" -PercentComplete $progress
+                        }
+                        Start-Sleep -Milliseconds 500
+                    }
+                    
+                    Complete-BitsTransfer -BitsJob $BitsJob
                     
                     # Verify download
                     if (Test-Path $destinationFile -PathType Leaf) {
@@ -1117,43 +1128,94 @@ function Download-Software {
             }
         }
         
-        # Standard download method for non-PortableApps files
+        # Standard download method for non-PortableApps files (with progress tracking)
         Write-Host "Using standard download method..." -ForegroundColor Cyan
         try {
-            $ProgressPreference = 'SilentlyContinue'
-            
-            # First try BITS if available
+            # First try BITS if available (with progress)
             try {
-                Start-BitsTransfer -Source $url -Destination $destinationFile -ErrorAction Stop -Priority High
+                $BitsJob = Start-BitsTransfer -Source $url -Destination $destinationFile -Asynchronous -ErrorAction Stop
+                
+                # Show BITS transfer progress
+                while ($BitsJob.JobState -eq "Transferring" -or $BitsJob.JobState -eq "Connecting") {
+                    if ($BitsJob.BytesTotal -gt 0) {
+                        $progress = [math]::Round(($BitsJob.BytesTransferred * 100) / $BitsJob.BytesTotal, 2)
+                        Write-Progress -Activity "Downloading $fileName" -Status "$progress% Complete" -PercentComplete $progress
+                    }
+                    Start-Sleep -Milliseconds 500
+                }
+                
+                Complete-BitsTransfer -BitsJob $BitsJob
                 return $destinationFile
             } catch {
                 Write-Host "BITS transfer failed, falling back to web request: $_" -ForegroundColor Yellow
             }
             
-            # Fall back to Invoke-WebRequest
-            $client = New-Object System.Net.WebClient
-            $client.DownloadFile($url, $destinationFile)
-            return $destinationFile
-        } catch {
-            Write-Host "Standard download failed: $_" -ForegroundColor Red
-            
-            # Final fallback with browser emulation
-            Write-Host "Attempting browser-emulated download..."
+            # Fall back to WebClient with progress
             try {
-                $response = Invoke-WebRequest -Uri $url -UserAgent "Mozilla/5.0" -MaximumRedirection 10 -TimeoutSec 60 -ErrorAction Stop
+                $webClient = New-Object System.Net.WebClient
                 
-                # Check if we got a real file
-                if ($response.Headers['Content-Type'] -like 'application/*' -or 
-                    $response.Headers['Content-Type'] -like 'binary/*' -or
-                    $response.Headers['Content-Type'] -like 'octet-stream*') {
-                    [System.IO.File]::WriteAllBytes($destinationFile, $response.Content)
+                # Register event for progress tracking
+                $global:downloadComplete = $false
+                $eventData = @{
+                    FileName = $fileName
+                    LastProgress = 0
+                }
+                
+                $webClient.DownloadProgressChanged += {
+                    param($sender, $args)
+                    $progress = $args.ProgressPercentage
+                    if ($progress -ne $eventData.LastProgress -and $progress % 5 -eq 0) {
+                        $eventData.LastProgress = $progress
+                        Write-Progress -Activity "Downloading $($eventData.FileName)" -Status "$progress% Complete" -PercentComplete $progress
+                    }
+                }
+                
+                $webClient.DownloadFileCompleted += {
+                    param($sender, $args)
+                    $global:downloadComplete = $true
+                    if ($args.Error) {
+                        Write-Host "Download failed: $($args.Error.Message)" -ForegroundColor Red
+                    }
+                    Write-Progress -Activity "Downloading $($eventData.FileName)" -Completed
+                }
+                
+                Write-Host "Starting download with progress tracking..."
+                $webClient.DownloadFileAsync([uri]$url, $destinationFile)
+                
+                # Wait for download to complete
+                while (-not $global:downloadComplete) {
+                    Start-Sleep -Milliseconds 500
+                }
+                
+                if (Test-Path $destinationFile) {
                     return $destinationFile
                 } else {
-                    throw "Server returned non-file content"
+                    throw "Download completed but file not found"
                 }
             } catch {
-                Write-Host "Browser emulation failed: $_" -ForegroundColor Red
-                throw "All download methods failed"
+                Write-Host "WebClient download failed: $_" -ForegroundColor Red
+                
+                # Final fallback with browser emulation
+                Write-Host "Attempting browser-emulated download..."
+                try {
+                    $ProgressPreference = 'SilentlyContinue'
+                    $response = Invoke-WebRequest -Uri $url -UserAgent "Mozilla/5.0" -MaximumRedirection 10 -TimeoutSec 60 -ErrorAction Stop
+                    
+                    # Check if we got a real file
+                    if ($response.Headers['Content-Type'] -like 'application/*' -or 
+                        $response.Headers['Content-Type'] -like 'binary/*' -or
+                        $response.Headers['Content-Type'] -like 'octet-stream*') {
+                        [System.IO.File]::WriteAllBytes($destinationFile, $response.Content)
+                        return $destinationFile
+                    } else {
+                        throw "Server returned non-file content"
+                    }
+                } catch {
+                    Write-Host "Browser emulation failed: $_" -ForegroundColor Red
+                    throw "All download methods failed"
+                } finally {
+                    $ProgressPreference = 'Continue'
+                }
             }
         } finally {
             $ProgressPreference = 'Continue'
